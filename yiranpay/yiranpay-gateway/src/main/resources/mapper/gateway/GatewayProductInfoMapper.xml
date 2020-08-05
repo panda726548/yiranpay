@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayProductInfoMapper">
+    
+    <resultMap type="GatewayProductInfo" id="GatewayProductInfoResult">
+        <result property="productId"    column="product_id"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="productName"    column="product_name"    />
+        <result property="parentName"     column="parent_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="parentMenuType"    column="parent_menu_type"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+    </resultMap>
+
+    <sql id="selectGatewayProductInfoVo">
+        select product_id, product_code, product_name, parent_id, order_num, parent_menu_type, status, create_by, create_time, update_by, update_time, remark, extend1, extend2, extend3 from gateway_product_info
+    </sql>
+
+    <select id="selectGatewayProductInfoList" parameterType="GatewayProductInfo" resultMap="GatewayProductInfoResult">
+        <include refid="selectGatewayProductInfoVo"/>
+        where status = 1
+        order by parent_id, order_num
+    </select>
+    
+    <select id="selectGatewayProductInfoById" parameterType="Long" resultMap="GatewayProductInfoResult">
+        select t.product_id, t.product_code, t.product_name, t.parent_id, t.order_num, t.parent_menu_type, t.status, t.create_by, t.create_time, t.update_by, t.update_time, t.remark, t.extend1, t.extend2, t.extend3,
+        (select product_name from gateway_product_info where product_id = t.parent_id) parent_name
+        from gateway_product_info t
+        where t.product_id = #{productId}
+    </select>
+     
+     <select id="checkProductNameUnique" parameterType="GatewayProductInfo" resultMap="GatewayProductInfoResult">
+        <include refid="selectGatewayProductInfoVo"/>
+        where product_name=#{productName} and parent_id = #{parentId}
+    </select>   
+    
+    <select id="selectCountProductByParentId" resultType="Integer">
+	    select count(1) from gateway_product_info where parent_id=#{parentId}  
+	</select>
+    
+    <select id="selectProductMenuAll" resultMap="GatewayProductInfoResult">
+        <include refid="selectGatewayProductInfoVo"/>
+        where status = 1
+        order by parent_id, order_num
+    </select>
+        
+    <insert id="insertGatewayProductInfo" parameterType="GatewayProductInfo" useGeneratedKeys="true" keyProperty="productId">
+        insert into gateway_product_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">product_code,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="orderNum != null ">order_num,</if>
+            <if test="parentMenuType != null  ">parent_menu_type,</if>
+            <if test="status != null ">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productCode != null  ">#{productCode},</if>
+            <if test="productName != null ">#{productName},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="parentMenuType != null  ">#{parentMenuType},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGatewayProductInfo" parameterType="GatewayProductInfo">
+        update gateway_product_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productCode != null  and productCode != ''">product_code = #{productCode},</if>
+            <if test="productName != null  and productName != ''">product_name = #{productName},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="orderNum != null ">order_num = #{orderNum},</if>
+            <if test="parentMenuType != null  and parentMenuType != ''">parent_menu_type = #{parentMenuType},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+        </trim>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteGatewayProductInfoById" parameterType="Long">
+        delete from gateway_product_info where product_id = #{productId}
+    </delete>
+
+    <delete id="deleteGatewayProductInfoByIds" parameterType="String">
+        delete from gateway_product_info where product_id in 
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+    
+</mapper>

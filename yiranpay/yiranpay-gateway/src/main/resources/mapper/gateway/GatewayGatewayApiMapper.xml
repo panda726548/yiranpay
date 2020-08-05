@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayGatewayApiMapper">
+    
+    <resultMap type="GatewayGatewayApi" id="GatewayGatewayApiResult">
+        <result property="apiId"    column="api_id"    />
+        <result property="apiCode"    column="api_code"    />
+        <result property="apiName"    column="api_name"    />
+        <result property="parentName"     column="parent_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="url"    column="url"    />
+        <result property="apiMenuType"    column="api_menu_type"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+    </resultMap>
+
+    <sql id="selectGatewayGatewayApiVo">
+        select api_id, api_code, api_name, parent_id, order_num, url,api_menu_type,status, create_by, create_time, update_by, update_time, remark, extend1, extend2, extend3 from gateway_gateway_api
+    </sql>
+
+	<select id="checkAPINameUnique" parameterType="GatewayGatewayApi" resultMap="GatewayGatewayApiResult">
+		<include refid="selectGatewayGatewayApiVo"/>
+		where api_name=#{apiName} and parent_id = #{parentId}
+	</select>
+	
+    <select id="selectGatewayGatewayApiList" parameterType="GatewayGatewayApi" resultMap="GatewayGatewayApiResult">
+        <include refid="selectGatewayGatewayApiVo"/>
+        where status = 1
+        order by parent_id, order_num
+    </select>
+    
+    <select id="selectGatewayGatewayApiById" parameterType="Long" resultMap="GatewayGatewayApiResult">
+        select t.api_id, t.api_code, t.api_name, t.parent_id, t.order_num, t.url,api_menu_type,t.status, t.create_by, t.create_time, t.update_by, t.update_time, t.remark, t.extend1, t.extend2, t.extend3, 
+        (select api_name from gateway_gateway_api where api_id = t.parent_id) parent_name
+        from gateway_gateway_api t
+        where t.api_id = #{apiId}
+    </select>
+    
+    <select id="selectApiMenuAll" resultMap="GatewayGatewayApiResult">
+        <include refid="selectGatewayGatewayApiVo"/>
+        where status = 1
+        order by parent_id, order_num
+    </select>
+    
+    <select id="selectApiAuthTree" parameterType="String" resultType="String">
+	    select a.api_id  from gateway_gateway_api a 
+	    	left join gateway_api_auth au on a.api_id = au.api_id
+		where au.merchant_id = #{merchantId}
+			order by a.parent_id, a.order_num
+	</select>
+    
+    <select id="selectCountApiByParentId" resultType="Integer">
+	    select count(1) from gateway_gateway_api where parent_id=#{parentId}  
+	</select>
+    <insert id="insertGatewayGatewayApi" parameterType="GatewayGatewayApi" useGeneratedKeys="true" keyProperty="apiId">
+        insert into gateway_gateway_api
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="apiCode != null  and apiCode != ''">api_code,</if>
+            <if test="apiName != null  and apiName != ''">api_name,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="orderNum != null ">order_num,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="apiMenuType != null  and apiMenuType != ''">api_menu_type,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            create_time,
+            update_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="apiCode != null  and apiCode != ''">#{apiCode},</if>
+            <if test="apiName != null  and apiName != ''">#{apiName},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="apiMenuType != null  and apiMenuType != ''">#{apiMenuType},</if>
+            <if test="url != null">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            sysdate(),
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateGatewayGatewayApi" parameterType="GatewayGatewayApi">
+        update gateway_gateway_api
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="apiCode != null  and apiCode != ''">api_code = #{apiCode},</if>
+            <if test="apiName != null  and apiName != ''">api_name = #{apiName},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="orderNum != null ">order_num = #{orderNum},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="apiMenuType != null  and apiMenuType != ''">api_menu_type = #{apiMenuType},</if>
+            <if test="url != null">status = #{status},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            update_time = sysdate()
+        </trim>
+        where api_id = #{apiId}
+    </update>
+
+    <delete id="deleteGatewayGatewayApiById" parameterType="Long">
+        delete from gateway_gateway_api where api_id = #{apiId}
+    </delete>
+
+    <delete id="deleteGatewayGatewayApiByIds" parameterType="String">
+        delete from gateway_gateway_api where api_id in 
+        <foreach item="apiId" collection="array" open="(" separator="," close=")">
+            #{apiId}
+        </foreach>
+    </delete>
+    
+</mapper>

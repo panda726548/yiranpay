@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('交易详情')" />
+</head>
+<body>
+    <div class="main-content">
+         <h4 class="form-header h4">会员信息</h4>
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">商户号：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${emailIdentity.memberId}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">商户登录名：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${emailIdentity.identity}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">是否认证：</label>
+                     <div class="col-sm-8">
+                         <span  class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+        
+          <h4 class="form-header h4">企业信息</h4>
+          
+          <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">企业名称：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.companyName}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">商户营业执照：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.licenseNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">企业编号：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.companyNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">企业地址：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.address}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">法人代表：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.legalPerson}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">法人手机号码：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${companyMember.legalPersonPhone}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-12">
+                 <div class="form-group">
+                     <label class="col-sm-2 control-label">营业范围：</label>
+                     <div class="col-sm-10">
+                         <span th:text="${companyMember.businessScope}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <h4 class="form-header h4">会员账户信息</h4>
+          
+          <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">会员账户：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${memberAccount.accountId}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户类型：</label>
+                     <div class="col-sm-8" th:if="${memberAccount.accountType eq 101 }">
+                     	 <span class="form-control" style="border: none">对私基本户</span>
+                     </div>
+                     <div class="col-sm-8" th:if="${memberAccount.accountType eq 201 }">
+                     	 <span class="form-control" style="border: none">对公基本户</span>
+                     </div>
+                     <div class="col-sm-8" th:if="${memberAccount.accountType eq 301 }">
+                     	 <span class="form-control" style="border: none">特约基本户</span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户属性：</label>
+                     <div class="col-sm-8" th:if="${memberAccount.accountAttribute eq 1 }">
+                         <span  class="form-control" style="border: none">对私</span>
+                     </div>
+                     <div class="col-sm-8" th:if="${memberAccount.accountAttribute eq 2 }">
+                         <span  class="form-control" style="border: none">对公</span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户余额：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${accountDetail.balance}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户可用余额：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${accountDetail.availableBalance}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户冻结余额：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${accountDetail.frozenBalance}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-6">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">可提现金额,信用账户现金额度：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${accountDetail.withdrawBalance}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-6">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">币种：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${accountDetail.currencyCode}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+    
+	<th:block th:include="include :: footer" />
+</body>
+</html>

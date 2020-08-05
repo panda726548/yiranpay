@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('对账详情')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+	    	<br/>
+	    	<div class="col-sm-12">
+	   			<blockquote class="text-success" style="font-size:14px;">
+	             	<h3 style="color: green;" th:if=" ${bach.status} eq 'SUCCESS'"><i class="fa fa-check"></i>&nbsp;&nbsp;处理完成->对账操作成功</h3>
+	             	<h3 style="color: green;" th:if=" ${bach.status} ne 'SUCCESS'"><i class="fa fa-check"></i>&nbsp;&nbsp;处理完成->银行没有订单信息</h3>
+	            </blockquote>
+	        </div>
+	        <br/>
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+            	<div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">对账批次号：</label>
+                        <div class="col-sm-8" th:text="${bach.batchNo}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">账单时间：</label>
+                        <div class="col-sm-8" th:text="${#dates.format(bach.billDate, 'yyyy-MM-dd')}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">账单类型：</label>
+                        <div class="col-sm-8" th:text="${bach.billType}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="form-header h4">对账信息</h4>
+            <div class="row">
+            	<div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">平台总交易单数：</label>
+                        <div class="col-sm-8" th:text="${bach.tradeCount}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">银行总交易单数：</label>
+                        <div class="col-sm-8" th:text="${bach.bankTradeCount}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">差错总单数：</label>
+                        <div class="col-sm-8" th:text="${bach.mistakeCount}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">待处理差错总单数：</label>
+                        <div class="col-sm-8" th:text="${bach.unhandleMistakeCount}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">平台交易总金额：</label>
+                        <div class="col-sm-8" th:text="${#numbers.formatDecimal(bach.tradeAmount, 1, 2)}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">银行交易总金额：</label>
+                        <div class="col-sm-8" th:text="${#numbers.formatDecimal(bach.bankTradeAmount, 1, 2)}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">平台退款总金额：</label>
+                        <div class="col-sm-8" th:text="${#numbers.formatDecimal(bach.refundAmount, 1, 2)}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">银行退款总金额：</label>
+                        <div class="col-sm-8" th:text="${#numbers.formatDecimal(bach.bankRefundAmount, 1, 2)}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">平台总手续费：</label>
+                        <div class="col-sm-8" th:text="${#numbers.formatDecimal(bach.bankFee, 1, 2)}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" >
+            	<div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">银行返回错误信息：</label>
+                        <div class="col-sm-8" th:text="${bach.bankErrMsg}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">解析失败的描述信息：</label>
+                        <div class="col-sm-8" th:text="${bach.checkFailMsg}"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">支付渠道：</label>
+                        <div class="col-sm-8" th:text="${bach.bankType}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-12" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">原始对账文件存放地址：</label>
+                        <div class="col-sm-8" th:text="${bach.orgCheckFilePath}"></div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-12" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">解析后文件存放地址：</label>
+                        <div class="col-sm-8" th:text="${bach.releaseCheckFilePath}"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">解析状态：</label>
+                        <div class="col-sm-8" th:text="${bach.releaseStatus}"></div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: select2-js" />
+</body>
+</html>

@@ -1,0 +1,14 @@
+# spring框架相关配置
+spring:
+  jackson:
+    time-zone: GMT+8
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+# Servlet容器相关配置
+server:
+  # 服务器的HTTP端口，默认为8085
+  port: 8085
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  use-forward-headers: true

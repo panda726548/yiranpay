@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改产品申请')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-approval-edit" th:object="${gatewayProductApproval}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">商户号：</label>
+                <div class="col-sm-8">
+                    <input name="memberNo" disabled="disabled" th:field="*{memberNo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品编码：</label>
+                <div class="col-sm-8">
+                    <input name="productCode" disabled="disabled" th:field="*{productCode}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品名称：</label>
+                <div class="col-sm-8">
+                    <input name="productName" disabled="disabled" th:field="*{productName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">审批意见：</label>
+                <div class="col-sm-8">
+                    <textarea name="reason" class="form-control"></textarea>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "gateway/approval";
+        $("#form-approval-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-approval-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

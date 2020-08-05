@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>yiranpay</artifactId>
+        <groupId>com.yiranpay</groupId>
+        <version>1.1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>yiranpay-message</artifactId>
+
+    <description>
+        message短息邮件模块
+    </description>
+
+    <properties>
+        <aliyun.sdk.version>4.5.0</aliyun.sdk.version>
+        <aliyun.sdk.core.version>2.1.0</aliyun.sdk.core.version>
+        <email.version>1.5</email.version>
+    </properties>
+
+    <dependencies>
+        <!-- 通用工具-->
+        <dependency>
+            <groupId>com.yiranpay</groupId>
+            <artifactId>yiranpay-common</artifactId>
+            <version>${yiranpay.version}</version>
+        </dependency>
+        <!-- 阿里短信-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>${aliyun.sdk.core.version}</version>
+        </dependency>
+        <!-- 系统模块-->
+        <dependency>
+            <groupId>com.yiranpay</groupId>
+            <artifactId>yiranpay-system</artifactId>
+            <version>${yiranpay.version}</version>
+        </dependency>
+        <!-- 邮件工具类 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>${email.version}</version>
+        </dependency>
+    </dependencies>
+</project>

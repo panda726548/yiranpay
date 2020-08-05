@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+	<!-- bootstrap-table 表格插件样式 -->
+	<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/animate.css}" rel="stylesheet"/>
+	<link th:href="@{/css/product/style.css}" rel="stylesheet"/>
+	<link th:href="@{/yiran/css/ry-ui.css}" rel="stylesheet"/>
+</head>
+<body>
+    <div class="main-content">
+    <div th:if="${not #lists.isEmpty(alreadyOpened)}">
+    	我开通的应用
+    	<hr/>
+    	<div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+            
+                <div class="col-md-4" th:each="ao: ${alreadyOpened}">
+                    <div class="payment-card">
+                        <i class="fa fa-cc-paypal payment-icon-big text-success"></i>
+                        <h2 th:text="${ao.productName}"></h2>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <small>
+                                    	产品编码：<strong th:text="${ao.productCode}"></strong>
+                                </small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <small>
+                                    <a th:href="'javascript:showApprovalLeave('+${ao.productCode}+')'"><strong th:if="${ao.extend2 =='1'}" style="color: red;">审批中</strong></a>
+                                    <a th:href="'javascript:showApprovalLeave('+${ao.productCode}+')'"><strong th:if="${ao.extend2 =='2'}" style="color: green;">已开通</strong></a>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+
+        </div>
+    </div>
+        
+        未开通
+        <hr/>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-md-4" th:each="wo: ${weiOpen}">
+                    <div class="payment-card">
+                        <i class="fa fa-cc-paypal payment-icon-big text-success"></i>
+                        <h2 th:text="${wo.productName}"></h2>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <small>
+                                    <strong><a th:href="'javascript:application('+${wo.productCode}+')'" >申请开通</a></strong>
+                                </small>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <small>
+                                    <strong>未开通</strong>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+
+        </div>
+        
+    </div>
+    
+    <script th:inline="javascript">
+    	function application(productCode){
+    		$.modal.loading("产品申请中,请稍后...");
+    		$.ajax({
+           		type: "get",
+           		url: ctx + "merchanr/product/application/"+productCode,
+           		success: function (data) {
+           			$.modal.closeLoading();
+           			$.modal.msgReload("申请成功，请等待审批。如需要加急，请直接联系客户经理。", modal_status.SUCCESS);
+           		},
+           		//调用出错执行的函数
+                 error: function(){
+                	$.modal.closeLoading();
+                	$.modal.alertError("产品申请失败!");
+                 }
+           	});
+    		
+    	}
+    	
+    	function showApprovalLeave(productCode){
+    		$.modal.openNoBtn("申请审批明细", ctx + "merchanr/product/showApprovalLeave/"+productCode);
+    	}
+    </script>
+    
+	<th:block th:include="include :: footer" />
+</body>
+</html>

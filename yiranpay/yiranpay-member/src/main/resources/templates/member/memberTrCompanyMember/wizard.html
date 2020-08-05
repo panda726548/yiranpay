@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增用户')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+        <form id="form-user-add" class="form-horizontal">
+        	<h4 class="form-header h4">登录账户信息</h4>
+        	<div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">登录名：</label>
+                        <div class="col-sm-8">
+                            <input name="loginName" placeholder="请输入商户登录名" class="form-control" type="text"  required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">登录密码：</label>
+                        <div class="col-sm-8">
+                            <input name="loginPassword" placeholder="请输入登录密码" class="form-control" type="password"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">外部平台用户标识：</label>
+                        <div class="col-sm-8">
+                            <input name="platformUserId" placeholder="请输入外部平台用户标识" class="form-control" type="text"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">登录名类型：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="loginNameType" id="loginNameType">
+                                <option value="1">邮箱</option>
+                                <option value="2">手机号</option>
+                                <option value="3">普通文字</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">会员名称 ：</label>
+                        <div class="col-sm-8">
+                            <input name="memberName" placeholder="请输入会员名称" class="form-control" type="text"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">会员类型：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="memberType" id="memberType">
+                                 <option value="2">企业会员</option>
+                                 <option value="1">个人会员</option>
+                                 <option value="3">特约商户</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">会员状态与账户标志：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="memberAccountFlag" id="memberAccountFlag">
+                            	<option value="2">会员和储值账户都激活</option>
+                                 <option value="0">会员未激活，且不开储值基本户</option>
+                                 <option value="1">会员激活，并开未激活储值基本户</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">企业资料信息</h4>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">企业名称：</label>
+                        <div class="col-sm-8">
+                            <input name="companyName" placeholder="请输入企业名称" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">商户营业执照：</label>
+                        <div class="col-sm-8">
+                            <input name="licenseNo"  class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">营业执照期限：</label>
+                        <div class="col-sm-8">
+                            <input id="licenseExpireDate" name="licenseExpireDate"  class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">企业编号：</label>
+                        <div class="col-sm-8">
+                            <input id="companyNo" name="companyNo" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">营业范围：</label>
+                        <div class="col-xs-10">
+                            <textarea name="businessScope"  class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">企业规模：</label>
+                        <div class="col-sm-8">
+                            <input id="scale" name="scale" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">企业网址：</label>
+                        <div class="col-sm-8">
+                            <input id="website" name="website" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">法人代表：</label>
+                        <div class="col-sm-8">
+                            <input id="legalPerson" name="legalPerson" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">法人手机号码：</label>
+                        <div class="col-sm-8">
+                            <input id="legalPersonPhone" name="legalPersonPhone" class="form-control" type="text"  maxlength="11">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">法人证件：</label>
+                        <div class="col-sm-8">
+                            <input id="licenseName" name="licenseName" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">法人身份证有效期：</label>
+                        <div class="col-sm-8">
+                            <input id="legalPersonIdValidDate" name="legalPersonIdValidDate" class="form-control" type="text"  maxlength="11">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">企业地址：</label>
+                        <div class="col-sm-8">
+                            <input id="address" name="address" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">营业执照所在地：</label>
+                        <div class="col-sm-8">
+                            <input id="licenseAddress" name="licenseAddress" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">企业简介：</label>
+                        <div class="col-xs-10">
+                            <textarea name="summary"  class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">企业类型：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="companyType" id="companyType">
+                                 <option value="0">企业</option>
+                                 <option value="1">其他</option>
+                                 <option value="2">事业单位</option>
+                                 <option value="3">个体工商户</option>
+                                 <option value="4">民办非企业</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">商户简称：</label>
+                        <div class="col-sm-8">
+                            <input id="shortName" name="shortName" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">企业账户信息</h4>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">账户类型：</label>
+                        <div class="col-sm-8">
+                            <input id="accountType" name="accountType" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">激活状态：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="activateStatus" id="activateStatus">
+                                 <option value="1">已激活</option>
+                                 <option value="0">未激活</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">冻结状态：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="freezeStatus" id="freezeStatus">
+                                 <option value="0">未冻结</option>
+                                 <option value="1">止出</option>
+                                 <option value="2">止入</option>
+                                 <option value="3">双向冻结(锁定)</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">激活状态：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="lifeCycleStatus" id="lifeCycleStatus">
+                                 <option value="0">未销户</option>
+                                 <option value="1">已销户</option>
+                                 <option value="2">已结转长期不动户</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">账户属性：</label>
+                        <div class="col-sm-8">
+                            <input id="accountAttribute" name="accountAttribute" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">账户分类：</label>
+                        <div class="col-sm-8">
+                            <input id="cateEnum" name="cateEnum" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="form-header h4">企业账户信息</h4>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">商户名：</label>
+                        <div class="col-sm-8">
+                            <input id="merchantName" name="merchantName" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">商户类型：</label>
+                        <div class="col-sm-8">
+                            <input id="merchantType" name="merchantType" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">商户状态：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control m-b" name="merchatStatus" id="merchatStatus">
+                                 <option value="1">正常</option>
+                                 <option value="0">未激活</option>
+                                 <option value="3">注销</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+      
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: select2-js" />
+	<script>
+	    var prefix = ctx + "member/memberTrCompanyMember";
+	
+        $("#form-user-add").validate({
+        	onkeyup: false,
+        	rules:{
+        		password:{
+        			minlength: 5,
+        			maxlength: 20
+        		}
+        		
+        	},
+        	messages: {
+                
+            },
+            focusCleanup: true
+        });
+        
+        function submitHandler() {
+	        	var data = $("#form-user-add").serializeArray();
+	        	$.operate.save(prefix + "/add", data);
+	    }
+
+    </script>
+</body>
+</html>

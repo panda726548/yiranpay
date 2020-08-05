@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+		<div class="row">
+            <div class="col-sm-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content text-left p-md">
+                        <h3><span class="text-navy">您好，<span th:text="${companyMember.companyName}"></span>(未认证)</span></h3>
+                        <p>
+                         	<h4>操作员：<span>管理员(admin)</span></h4>
+                        </p>
+                        <p>
+                         	预留信息：这里是预留信息
+                        </p>
+                        <hr/>
+                        <p>
+                         	上次登录时间：<span th:text="${#dates.format(sysLogin.loginTime,'yyyy-MM-dd HH:mm:ss')}"></span>&nbsp;&nbsp;&nbsp;&nbsp;上次登录IP：<span th:text="${sysLogin.ipaddr}"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+		            <div class="col-sm-4">
+		                <div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5 class="text-navy">账户余额</h5>
+		                    </div>
+		                    <div class="ibox-content">
+		                    	<span>可用余额(元)</span>
+		                        <h1 class="no-margins" style="color: red;" th:text="${account.availableBalance}">40 886,200</h1>
+		                        <small>冻结金额：<span th:text="${account.frozenBalance}">0.00</span>&nbsp;(元)</small>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="col-sm-4">
+		                <div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5 class="text-navy">今日交易</h5>
+		                    </div>
+		                    <div class="ibox-content">
+		                    	<span>交易总额(元)</span>
+		                        <h1 class="no-margins" style="color: red;" th:text="${todayTradeMoney}"></h1>
+		                        <small>今日交易笔数：<span th:text="${todayTradeCount}"></span>&nbsp;/笔</small>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="col-sm-4">
+		                <div class="ibox float-e-margins">
+		                    <div class="ibox-title">
+		                        <h5 class="text-navy">昨日交易</h5>
+		                    </div>
+		                    <div class="ibox-content">
+		                    	<span>交易总额(元)</span>
+		                        <h1 class="no-margins" style="color: red;" th:text="${yesterdayTradeMoney}"></h1>
+		                        <small>昨日交易笔数：<span th:text="${yesterdayTradeCount}"></span>&nbsp;/笔</small>
+		                    </div>
+		                </div>
+		           </div>
+        	</div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content text-left p-md">
+                        <h3><span class="text-navy">公告</span></h3>
+                        <table class="table table-hover no-margins">
+                            <thead>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>状态</th>
+                                    <th>发布日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="n,iterStat : ${noticeList}">
+                                    <td><a th:href="'javascript:read('+${n.noticeId}+')'"><small th:text="${n.noticeTitle}"></small></a></td>
+                                    <td th:with="type=${@dict.getType('system_notice_read_status')}">
+                                        <small th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:if="${n.noticeRead.checkUp==dict.dictValue}"></small>
+                                    </td>
+                                    <td th:text="${#dates.format(n.createTime,'yyyy-MM-dd')}"></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="3" style="text-align: right;">>>>&nbsp;<a href="/system/notice">更多</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 class="text-navy">交易记录</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                	<a th:href="@{/merchant/order}">更多</a>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover no-margins">
+                            <thead>
+                                <tr>
+                                	<th>交易时间</th>
+                                    <th>业务订单</th>
+                                    <th>交易订单</th>
+                                    <th>交易类型</th>
+                                    <th>交易金额</th>
+                                    <th>支付状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="o,iterStat : ${orderList}">
+                                    <td th:text="${o.payTime}"></td>
+                                    <td th:text="${o.businessOrderNO}"></td>
+                                    <td th:text="${o.tradeOrderNo}"></td>
+                                    <td th:text="${o.tradeType}"></td>
+                                    <td th:text="${o.amount}"></td>
+                                    <td th:if="${o.status eq 'S'}">成功</td>
+                                    <td><a th:href="'javascript:showorder(\''+${o.tradeOrderNo}+'\')'">详情</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         </div>
+      </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
+    <script th:src="@{/yiran/js/common.js?v=4.1.0}"></script>
+	<script th:src="@{/yiran/js/ry-ui.js?v=4.1.0}"></script>
+    <th:block th:include="include :: sparkline-js" />
+    <script th:inline="javascript">
+    	var ctx = [[@{/}]];
+        var prefix = ctx + "merchant/order";
+        function showorder(tradeOrderNo){
+        	$.modal.openTab("交易明细", prefix+"/show/"+tradeOrderNo);
+        }
+        
+        function read(noticeId) {
+			var url = ctx + "system/notice/read/" + noticeId;
+
+			$.modal.openTab("公告", url);
+		}
+    </script>
+</body>
+</html>

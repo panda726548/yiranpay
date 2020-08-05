@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayApprovalLeaveMapper">
+    
+    <resultMap type="GatewayApprovalLeave" id="GatewayApprovalLeaveResult">
+        <result property="auditid"    column="auditId"    />
+        <result property="approvalId"    column="approval_id"    />
+        <result property="userid"    column="userId"    />
+        <result property="auditresult"    column="auditResult"    />
+        <result property="comment"    column="comment"    />
+        <result property="audittime"    column="auditTime"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectGatewayApprovalLeaveVo">
+        select auditId, approval_id, userId, auditResult, comment, auditTime, create_by, create_time, update_by, update_time, remark from gateway_approval_leave
+    </sql>
+
+    <select id="selectGatewayApprovalLeaveList" parameterType="GatewayApprovalLeave" resultMap="GatewayApprovalLeaveResult">
+        <include refid="selectGatewayApprovalLeaveVo"/>
+        <where>  
+            <if test="approvalId != null "> and approval_id = #{approvalId}</if>
+            <if test="userid != null  and userid != ''"> and userId = #{userid}</if>
+            <if test="auditresult != null "> and auditResult = #{auditresult}</if>
+            <if test="comment != null  and comment != ''"> and comment = #{comment}</if>
+            <if test="audittime != null "> and auditTime = #{audittime}</if>
+        </where>
+        order by audittime desc
+    </select>
+    
+    <select id="selectGatewayApprovalLeaveById" parameterType="Long" resultMap="GatewayApprovalLeaveResult">
+        <include refid="selectGatewayApprovalLeaveVo"/>
+        where auditId = #{auditid}
+    </select>
+        
+    <insert id="insertGatewayApprovalLeave" parameterType="GatewayApprovalLeave" useGeneratedKeys="true" keyProperty="auditid">
+        insert into gateway_approval_leave
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="approvalId != null ">approval_id,</if>
+            <if test="userid != null  and userid != ''">userId,</if>
+            <if test="auditresult != null ">auditResult,</if>
+            <if test="comment != null  and comment != ''">comment,</if>
+            <if test="audittime != null ">auditTime,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="approvalId != null ">#{approvalId},</if>
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="auditresult != null ">#{auditresult},</if>
+            <if test="comment != null  and comment != ''">#{comment},</if>
+            <if test="audittime != null ">#{audittime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGatewayApprovalLeave" parameterType="GatewayApprovalLeave">
+        update gateway_approval_leave
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="approvalId != null ">approval_id = #{approvalId},</if>
+            <if test="userid != null  and userid != ''">userId = #{userid},</if>
+            <if test="auditresult != null ">auditResult = #{auditresult},</if>
+            <if test="comment != null  and comment != ''">comment = #{comment},</if>
+            <if test="audittime != null ">auditTime = #{audittime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where auditId = #{auditid}
+    </update>
+
+    <delete id="deleteGatewayApprovalLeaveById" parameterType="Long">
+        delete from gateway_approval_leave where auditId = #{auditid}
+    </delete>
+
+    <delete id="deleteGatewayApprovalLeaveByIds" parameterType="String">
+        delete from gateway_approval_leave where auditId in 
+        <foreach item="auditid" collection="array" open="(" separator="," close=")">
+            #{auditid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('商户秘钥管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="importPublicKey()" >
+                    	导入商户公钥
+                </a>
+                <a class="btn btn-primary " onclick="downloadPublicKey()" >
+                    	 下载YiRanPay聚合支付公钥
+                </a>
+            </div>
+            <div class="col-sm-12 select-table  table-bordered">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "merchanr/key";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "商户秘钥管理",
+                columns: [
+                {
+                    field : 'merchantId', 
+                    title : '商户号'
+                },
+                {
+                    field : 'publicKey', 
+                    title : '公钥',
+                },
+                {
+                    field : 'signType', 
+                    title : '签约类型'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs "href="javascript:void(0)" onclick="$.operate.edit(\'' + row.secretkeyId + '\')"><i class="fa fa-edit"></i>修改公钥</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        
+        
+        function importPublicKey(){
+        	//1.查询商户id下是否设置过公钥，如果设置过，就不能导入，只能修改
+        	$.ajax({
+	            url:"/merchanr/key/isPublicKey",
+	            type: "GET",
+	            success: function (data) {
+	            	if(true == data.data){
+	            		$.modal.alertError('公钥已经设置，不能再导入，只能修改公钥');
+	            	}else{
+	            		//2.如果没有就新增一条
+		            	$.modal.open("导入商户公钥", prefix + "/add");
+	            	}
+	            	
+	            }
+			}); 
+        	
+        }
+        
+		function downloadPublicKey(){
+			$.ajax({
+	            url:"/merchanr/key/getSysPublicKey",
+	            type: "GET",
+	            success: function (data) {
+	            	$.modal.alert("依然聚合支付公钥：\n\n\n" + data.msg)
+	            }
+			}); 
+        }
+    </script>
+</body>
+</html>

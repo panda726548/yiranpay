@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayMerchantConfigMapper">
+    
+    <resultMap type="GatewayMerchantConfig" id="GatewayMerchantConfigResult">
+        <result property="id"    column="id"    />
+        <result property="merchantId"    column="merchant_id"    />
+        <result property="availableApi"    column="available_api"    />
+        <result property="encryptionType"    column="encryption_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+    </resultMap>
+
+    <sql id="selectGatewayMerchantConfigVo">
+        select id, merchant_id, available_api, encryption_type, create_by, create_time, update_by, update_time, remark, extend1, extend2, extend3 from gateway_merchant_config
+    </sql>
+
+    <select id="selectGatewayMerchantConfigList" parameterType="GatewayMerchantConfig" resultMap="GatewayMerchantConfigResult">
+        <include refid="selectGatewayMerchantConfigVo"/>
+        <where>  
+            <if test="merchantId != null  and merchantId != ''"> and merchant_id = #{merchantId}</if>
+            <if test="availableApi != null  and availableApi != ''"> and available_api = #{availableApi}</if>
+            <if test="encryptionType != null  and encryptionType != ''"> and encryption_type = #{encryptionType}</if>
+            <if test="extend1 != null  and extend1 != ''"> and extend1 = #{extend1}</if>
+            <if test="extend2 != null  and extend2 != ''"> and extend2 = #{extend2}</if>
+            <if test="extend3 != null  and extend3 != ''"> and extend3 = #{extend3}</if>
+        </where>
+    </select>
+    
+    <select id="selectGatewayMerchantConfigById" parameterType="Long" resultMap="GatewayMerchantConfigResult">
+        <include refid="selectGatewayMerchantConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGatewayMerchantConfig" parameterType="GatewayMerchantConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into gateway_merchant_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">merchant_id,</if>
+            <if test="availableApi != null  and availableApi != ''">available_api,</if>
+            <if test="encryptionType != null  and encryptionType != ''">encryption_type,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="extend1 != null  and extend1 != ''">extend1,</if>
+            <if test="extend2 != null  and extend2 != ''">extend2,</if>
+            <if test="extend3 != null  and extend3 != ''">extend3,</if>
+            create_time,
+            update_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">#{merchantId},</if>
+            <if test="availableApi != null  and availableApi != ''">#{availableApi},</if>
+            <if test="encryptionType != null  and encryptionType != ''">#{encryptionType},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">#{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">#{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">#{extend3},</if>
+            sysdate(),
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateGatewayMerchantConfig" parameterType="GatewayMerchantConfig">
+        update gateway_merchant_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">merchant_id = #{merchantId},</if>
+            <if test="availableApi != null  and availableApi != ''">available_api = #{availableApi},</if>
+            <if test="encryptionType != null  and encryptionType != ''">encryption_type = #{encryptionType},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="extend1 != null  and extend1 != ''">extend1 = #{extend1},</if>
+            <if test="extend2 != null  and extend2 != ''">extend2 = #{extend2},</if>
+            <if test="extend3 != null  and extend3 != ''">extend3 = #{extend3},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGatewayMerchantConfigById" parameterType="Long">
+        delete from gateway_merchant_config where id = #{id}
+    </delete>
+
+    <delete id="deleteGatewayMerchantConfigByIds" parameterType="String">
+        delete from gateway_merchant_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

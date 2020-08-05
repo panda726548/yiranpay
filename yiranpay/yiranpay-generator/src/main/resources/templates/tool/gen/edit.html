@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('淇敼鐢熸垚淇℃伅')" />
+	<th:block th:include="include :: select2-css" />
+	<style type="text/css">
+	    .select-table table{table-layout:fixed;}.table>thead>tr>th{text-align:center;}.select-table .table td{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.form-control{padding:3px 6px 4px;height:30px;}.icheckbox-blue{top:0px;left:6px;}.form-control.select2-hidden-accessible{position:static!important;}.select-table table label.error{position: inherit;}select + label.error{z-index:1;right:40px;}
+	</style>
+</head>
+<body class="gray-bg" style="font: 14px Helvetica Neue, Helvetica, PingFang SC, 寰蒋闆呴粦, Tahoma, Arial, sans-serif !important;">
+    <section class="section-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="border-style:none;">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li><a href="#tab-basic" data-toggle="tab" aria-expanded="false">鍩烘湰淇℃伅</a></li>
+                            <li class="active"><a href="#tab-field" data-toggle="tab" aria-expanded="true">瀛楁淇℃伅</a></li>
+                            <li><a href="#tab-gen" data-toggle="tab" aria-expanded="false">鐢熸垚淇℃伅</a></li>
+                            <li class="pull-right header">
+								<i class="fa fa-code"></i> 鐢熸垚閰嶇疆
+							</li>
+                        </ul>
+                        <form id="form-gen-edit" class="form-horizontal" th:object="${table}">
+                        <input name="tableId" type="hidden" th:field="*{tableId}" />
+                        <div class="tab-content">
+                            <!-- 鍩烘湰淇℃伅 -->
+                            <div class="tab-pane" id="tab-basic">
+				            <div class="row mt20">
+				            	<div class="col-sm-6">
+				                    <div class="form-group">
+				                        <label class="col-sm-4 control-label is-required">琛ㄥ悕绉帮細</label>
+				                        <div class="col-sm-8">
+				                            <input name="tableName" class="form-control" type="text" placeholder="璇疯緭鍏ヨ〃鍚嶇О" maxlength="200" th:field="*{tableName}" required>
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-sm-6">
+				                    <div class="form-group">
+				                        <label class="col-sm-4 control-label is-required">琛ㄦ弿杩帮細</label>
+				                        <div class="col-sm-8">
+				                            <input name="tableComment" class="form-control" type="text" placeholder="璇疯緭鍏ヨ〃鎻忚堪" maxlength="500" th:field="*{tableComment}" required>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="row">
+				                <div class="col-sm-6">
+				                    <div class="form-group">
+				                        <label class="col-sm-4 control-label is-required">瀹炰綋绫诲悕绉帮細</label>
+				                        <div class="col-sm-8">
+				                            <input name="className" class="form-control" type="text" placeholder="璇疯緭鍏ュ疄浣撶被鍚嶇О" maxlength="100" th:field="*{className}" required>
+				                        </div>
+				                    </div>
+				                </div>
+				                <div class="col-sm-6">
+				                    <div class="form-group">
+				                        <label class="col-sm-4 control-label is-required">浣滆�咃細</label>
+				                        <div class="col-sm-8">
+				                            <input name="functionAuthor" class="form-control" type="text" placeholder="璇疯緭鍏ヤ綔鑰�" maxlength="50" th:field="*{functionAuthor}" required>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="row">
+				                <div class="col-sm-12">
+				                    <div class="form-group">
+				                        <label class="col-xs-2 control-label">澶囨敞锛�</label>
+				                        <div class="col-xs-10">
+				                            <textarea name="remark" maxlength="500" class="form-control" rows="3"></textarea>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+                            </div>
+                            
+                            <!-- 瀛楁淇℃伅 -->
+                            <div class="tab-pane active" id="tab-field">
+                                <div class="select-table table-striped" style="margin-top: 0px;padding-top: 0px;padding-bottom: 0px;">
+								    <table id="bootstrap-table" data-use-row-attr-func="true" data-reorderable-rows="true"></table>
+								</div>
+                            </div>
+                            
+                            <!-- 鐢熸垚淇℃伅 -->
+                            <div class="tab-pane" id="tab-gen">
+					            <div class="row mt20">
+					            	<div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required">鐢熸垚妯℃澘锛�</label>
+					                        <div class="col-sm-8">
+					                            <select class='form-control' id="tplCategory" name='tplCategory' style="width: 100%">
+												    <option value="crud" th:field="*{tplCategory}">鍗曡〃锛堝鍒犳敼鏌ワ級</option>
+												    <option value="tree" th:field="*{tplCategory}">鏍戣〃锛堝鍒犳敼鏌ワ級</option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鐢熸垚鍦ㄥ摢涓猨ava鍖呬笅锛屼緥濡� com.yiranpay.project.system">鐢熸垚鍖呰矾寰勶細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <input name="packageName" class="form-control" type="text" placeholder="璇疯緭鍏ョ敓鎴愬寘璺緞" maxlength="100" th:field="*{packageName}" required>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鍙悊瑙ｄ负瀛愮郴缁熷悕锛屼緥濡� system">鐢熸垚妯″潡鍚嶏細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <input name="moduleName" class="form-control" type="text" placeholder="璇疯緭鍏ョ敓鎴愭ā鍧楀悕" maxlength="30" th:field="*{moduleName}" required>
+					                        </div>
+					                    </div>
+					                </div>
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鍙悊瑙ｄ负鍔熻兘鑻辨枃鍚嶏紝渚嬪 user">鐢熸垚涓氬姟鍚嶏細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <input name="businessName" class="form-control" type="text" placeholder="璇疯緭鍏ョ敓鎴愪笟鍔″悕" maxlength="50" th:field="*{businessName}" required>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鐢ㄤ綔绫绘弿杩帮紝渚嬪 鐢ㄦ埛">鐢熸垚鍔熻兘鍚嶏細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <input name="functionName" class="form-control" type="text" placeholder="璇疯緭鍏ョ敓鎴愬姛鑳藉悕" maxlength="50" th:field="*{functionName}" required>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="hidden" id="otherInfo">
+					            <h4 class="form-header h4">鍏朵粬淇℃伅</h4>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鏍戞樉绀虹殑缂栫爜瀛楁鍚嶏紝 濡傦細dept_id">鏍戠紪鐮佸瓧娈碉細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <select class='form-control' id="treeCode" name='params[treeCode]' style="width: 100%">
+					                                <option value="">---璇烽�夋嫨---</option>
+												    <option th:each="column : ${table.columns}" th:text="${column.columnName + '锛�' + column.columnComment}" th:value="${column.columnName}" th:field="*{treeCode}"></option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鏍戞樉绀虹殑鐖剁紪鐮佸瓧娈靛悕锛� 濡傦細parent_Id">鏍戠埗缂栫爜瀛楁锛�<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <select class='form-control' id="treeParentCode" name='params[treeParentCode]' style="width: 100%">
+												    <option value="">---璇烽�夋嫨---</option>
+												    <option th:each="column : ${table.columns}" th:text="${column.columnName + '锛�' + column.columnComment}" th:value="${column.columnName}" th:field="*{treeParentCode}"></option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="row">
+					                <div class="col-sm-6">
+					                    <div class="form-group">
+					                        <label class="col-sm-4 control-label is-required" title="鏍戣妭鐐圭殑鏄剧ず鍚嶇О瀛楁鍚嶏紝 濡傦細dept_name">鏍戝悕绉板瓧娈碉細<i class="fa fa-question-circle-o"></i></label>
+					                        <div class="col-sm-8">
+					                            <select class='form-control' id="treeName" name='params[treeName]' style="width: 100%">
+												    <option value="">---璇烽�夋嫨---</option>
+												    <option th:each="column : ${table.columns}" th:text="${column.columnName + '锛�' + column.columnComment}" th:value="${column.columnName}" th:field="*{treeName}"></option>
+												</select>
+					                        </div>
+					                    </div>
+					                </div>
+					            </div>
+					            </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+               <div class="box-footer">
+			       <div class="col-sm-offset-5 col-sm-6">
+			           <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>淇� 瀛�</button>&nbsp;
+			           <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>鍏� 闂� </button>
+			       </div>
+           	   </div>
+            </div>
+        </div>
+    </div>
+	</section>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <th:block th:include="include :: bootstrap-table-reorder-js" />
+    <script th:src="@{/js/jquery.tmpl.js}"></script>
+    <script type="text/javascript">
+	    /*鐢ㄦ埛淇℃伅-淇敼*/
+	    $("#form-table-edit").validate({
+	    	rules: {
+	    	    tableName: {
+	    	        required: true,
+	    	    },
+	    	},
+			focusCleanup: true
+		}); 
+	    
+	    function submitHandler() {
+	        if ($.validate.form()) {
+	        	$.operate.saveTab(prefix + "/edit", $("#form-gen-edit").serializeArray());
+	        }
+	    }
+	    
+	    var prefix = ctx + "tool/gen";
+		$(function() {
+		    var options = {
+		        url: prefix + "/column/list",
+		        sortName: "sort",
+		        sortOrder: "desc",
+		        height: $(window).height() - 166,
+		        pagination: false,
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        onLoadSuccess: onLoadSuccess,
+		        onReorderRow: onReorderRow,
+		        columns: [{
+                    title: "搴忓彿",
+                    width: "5%",
+                    formatter: function (value, row, index) {
+                    	// 缂栧彿闅愯棌鍩�
+                    	var columnIdHtml = $.common.sprintf("<input type='hidden' name='columns[%s].columnId' value='%s'>", index, row.columnId);
+                    	// 鎺掑簭闅愯棌鍩�
+                    	var sortHtml = $.common.sprintf("<input type='hidden' name='columns[%s].sort' value='%s' id='columns_sort_%s'>", index, row.sort, row.columnId);
+                    	return columnIdHtml + sortHtml + $.table.serialNumber(index);
+                    },
+                    cellStyle: function(value, row, index) {
+                        return { css: { "cursor": "move" } };
+                    }
+                },
+		        {
+		            field: 'columnName',
+		            title: '瀛楁鍒楀悕',
+		            width: "10%",
+		            class: "nodrag",
+		            cellStyle: function(value, row, index) {
+                        return { css: { "cursor": "default" } };
+                    }
+		        },
+		        {
+		            field: 'columnComment',
+		            title: '瀛楁鎻忚堪',
+		            width: "10%",
+		            formatter: function (value, row, index) {
+		            	var html = $.common.sprintf("<input class='form-control' type='text' name='columns[%s].columnComment' value='%s'>", index, value);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'columnType',
+		            title: '鐗╃悊绫诲瀷',
+		            width: "10%",
+		            class: "nodrag",
+		            cellStyle: function(value, row, index) {
+                        return { css: { "cursor": "default" } };
+                    }
+		        },
+		        {
+		            field: 'javaType',
+		            title: 'Java绫诲瀷',
+		            width: "10%",
+		            formatter: function (value, row, index) {
+		        		var data = [{ index: index, javaType: value }];
+		                return $("#javaTypeTpl").tmpl(data).html();
+		        	}
+		        },
+		        {
+		            field: 'javaField',
+		            title: 'Java灞炴��',
+		            width: "10%",
+		            formatter: function (value, row, index) {
+		        		var html = $.common.sprintf("<input class='form-control' type='text' name='columns[%s].javaField' value='%s' required>", index, value);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'isInsert',
+		            title: '鎻掑叆',
+		            width: "5%",
+		            formatter: function (value, row, index) {
+		            	var isCheck = value == 1 ? 'checked' : '';
+		            	var html = $.common.sprintf("<label class='check-box'><input type='checkbox' name='columns[%s].isInsert' value='1' %s></label>", index, isCheck);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'isEdit',
+		            title: '缂栬緫',
+		            width: "5%",
+		            formatter: function (value, row, index) {
+		            	var isCheck = value == 1 ? 'checked' : '';
+		            	var html = $.common.sprintf("<label class='check-box'><input type='checkbox' name='columns[%s].isEdit' value='1' %s></label>", index, isCheck);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'isList',
+		            title: '鍒楄〃',
+		            width: "5%",
+		            formatter: function (value, row, index) {
+		            	var isCheck = value == 1 ? 'checked' : '';
+		            	var html = $.common.sprintf("<label class='check-box'><input type='checkbox' name='columns[%s].isList' value='1' %s></label>", index, isCheck);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'isQuery',
+		            title: '鏌ヨ',
+		            width: "5%",
+		            formatter: function (value, row, index) {
+		            	var isCheck = value == 1 ? 'checked' : '';
+		            	var html = $.common.sprintf("<label class='check-box'><input type='checkbox' name='columns[%s].isQuery' value='1' %s></label>", index, isCheck);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'queryType',
+		            title: '鏌ヨ鏂瑰紡',
+		            width: "10%",
+		            formatter: function (value, row, index) {
+		            	var data = [{ index: index, queryType: value }];
+		                return $("#queryTypeTpl").tmpl(data).html();
+		        	}
+		        },
+		        {
+		            field: 'isRequired',
+		            title: '蹇呭～',
+		            width: "5%",
+		            formatter: function (value, row, index) {
+		            	var isCheck = value == 1 ? 'checked' : '';
+		            	var html = $.common.sprintf("<label class='check-box'><input type='checkbox' name='columns[%s].isRequired' value='1' %s></label>", index, isCheck);
+		        		return html;
+		        	}
+		        },
+		        {
+		            field: 'htmlType',
+		            title: '鏄剧ず绫诲瀷',
+		            width: "12%",
+		            formatter: function (value, row, index) {
+		            	var data = [{ index: index, htmlType: value }];
+		                return $("#htmlTypeTpl").tmpl(data).html();
+		        	}
+		        },
+		        {
+		            field: 'dictType',
+		            title: '瀛楀吀绫诲瀷',
+		            width: "13%",
+		            formatter: function (value, row, index) {
+		        		var html = $.common.sprintf("<input class='form-control' type='text' name='columns[%s].dictType' value='%s' id='columns_dict_%s'>", index, value, row.columnId);
+		        		return "<div class='input-group'>" + html + "<span class='input-group-addon input-sm' onclick='selectDictTree(" + row.columnId + ", this)'><i class='fa fa-search'></i></span></div>";
+		        	},
+		        	cellStyle: function(value, row, index) {
+                        return { css: { "cursor": "default" } };
+                    }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		// 褰撴墍鏈夋暟鎹鍔犺浇鏃惰Е鍙戝鐞嗗嚱鏁�
+		function onLoadSuccess(data){
+			$.fn.select2.defaults.set( "theme", "bootstrap" );
+			$("select.form-control").each(function () {
+				$(this).select2().on("change", function () {
+					$(this).valid();
+				})
+			})
+			$(".check-box").each(function() {
+	            $(this).iCheck({
+	                checkboxClass: 'icheckbox-blue'
+            	})
+        	})
+        }
+		
+		// 褰撴嫋鎷界粨鏉熷悗澶勭悊鍑芥暟
+		function onReorderRow(data) {
+	        for (var i = 0; i < data.length; i++) {
+			    $("#columns_sort_" + data[i].columnId).val(i+1);
+			}
+       }
+		
+		$(function() {
+            var tplCategory = $("#tplCategory option:selected").val();
+            tplCategoryVisible(tplCategory);
+        });
+		
+		$('#tplCategory').on('select2:select', function (event) {
+			var tplCategory = $(event.target).val();
+			tplCategoryVisible(tplCategory);
+		});
+		
+		function tplCategoryVisible(tplCategory) {
+			if("crud" == tplCategory){
+				$("#treeCode").select2("val", [""]);
+				$("#treeParentCode").select2("val", [""]);
+				$("#treeName").select2("val", [""]);
+				$("#otherInfo").addClass("hidden");
+				
+			} else if("tree" == tplCategory){
+				$("#otherInfo").removeClass("hidden");
+				$("#treeCode").attr("required", "true");
+				$("#treeParentCode").attr("required", "true");
+				$("#treeName").attr("required", "true");
+			}
+        }
+		
+		// 閫夋嫨瀛楀吀澶勭悊鍑芥暟
+		function selectDictTree(columnId, obj) {
+			var dictType = $.common.nullToStr($(obj).parent().find("input").val());
+        	var url = ctx + "system/dict/selectDictTree/" + columnId + "/" + dictType;
+			var options = {
+				title: '閫夋嫨瀛楀吀绫诲瀷',
+				width: "380",
+				url: url,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			var columnId = body.find('#columnId').val();
+   			var dictType = body.find('#dictType').val();
+   			layer.close(index);
+   			$("#columns_dict_" + columnId).val(dictType);
+		}
+    </script>
+</body>
+</html>
+
+
+<!-- java绫诲瀷 -->
+<script id="javaTypeTpl" type="text/x-jquery-tmpl">
+<div>
+<select class='form-control' name='columns[${index}].javaType'>
+    <option value="Long" {{if javaType==="Long"}}selected{{/if}}>Long</option>
+    <option value="String" {{if javaType==="String"}}selected{{/if}}>String</option>
+    <option value="Integer" {{if javaType==="Integer"}}selected{{/if}}>Integer</option>
+    <option value="Double" {{if javaType==="Double"}}selected{{/if}}>Double</option>
+    <option value="BigDecimal" {{if javaType==="BigDecimal"}}selected{{/if}}>BigDecimal</option>
+    <option value="Date" {{if javaType==="Date"}}selected{{/if}}>Date</option>
+</select>
+</div>
+</script>
+
+<!-- 鏌ヨ鏂瑰紡 -->
+<script id="queryTypeTpl" type="text/x-jquery-tmpl">
+<div>
+<select class='form-control' name='columns[${index}].queryType'>
+    <option value="EQ" {{if queryType==="EQ"}}selected{{/if}}>=</option>
+    <option value="NE" {{if queryType==="NE"}}selected{{/if}}>!=</option>
+    <option value="GT" {{if queryType==="GT"}}selected{{/if}}>></option>
+    <option value="GTE" {{if queryType==="GTE"}}selected{{/if}}>>=</option>
+    <option value="LT" {{if queryType==="LT"}}selected{{/if}}><</option>
+    <option value="LTE" {{if queryType==="LTE"}}selected{{/if}}><=</option>
+    <option value="LIKE" {{if queryType==="LIKE"}}selected{{/if}}>Like</option>
+    <option value="BETWEEN" {{if queryType==="BETWEEN"}}selected{{/if}}>Between</option>
+</select>
+</div>
+</script>
+
+<!-- 鏄剧ず绫诲瀷 -->
+<script id="htmlTypeTpl" type="text/x-jquery-tmpl">
+<div>
+<select class='form-control' name='columns[${index}].htmlType'>
+    <option value="input" {{if htmlType==="input"}}selected{{/if}}>鏂囨湰妗�</option>
+    <option value="textarea" {{if htmlType==="textarea"}}selected{{/if}}>鏂囨湰鍩�</option>
+    <option value="select" {{if htmlType==="select"}}selected{{/if}}>涓嬫媺妗�</option>
+    <option value="radio" {{if htmlType==="radio"}}selected{{/if}}>鍗曢�夋</option>
+    <option value="checkbox" {{if htmlType==="checkbox"}}selected{{/if}}>澶嶉�夋</option>
+    <option value="datetime" {{if htmlType==="datetime"}}selected{{/if}}>鏃ユ湡鎺т欢</option>
+</select>
+</div>
+</script>

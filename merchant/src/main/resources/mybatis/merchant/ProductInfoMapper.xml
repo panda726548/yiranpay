@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.merchant.product.mapper.ProductInfoMapper">
+    
+    <resultMap type="ProductInfo" id="ProductInfoResult">
+        <result property="productId"    column="product_id"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="productName"    column="product_name"    />
+        <result property="parentName"     column="parent_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="parentMenuType"    column="parent_menu_type"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="extend1"    column="extend1"    />
+        <result property="extend2"    column="extend2"    />
+        <result property="extend3"    column="extend3"    />
+    </resultMap>
+
+    <sql id="selectProductInfoVo">
+        select product_id, product_code, product_name, parent_id, order_num, parent_menu_type, status, create_by, create_time, update_by, update_time, remark, extend1, extend2, extend3 from gateway_product_info
+    </sql>
+
+    <select id="selectProductInfoList" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        where status = 1
+        and parent_menu_type = 'C'
+        order by parent_id, order_num
+    </select>
+    
+    <select id="selectProductInfoByProductCode" parameterType="String" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        where status = 1
+        and product_code = #{productCode}
+    </select>
+    
+    
+    
+</mapper>

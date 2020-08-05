@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.system.mapper.SysNoticeMapper">
+
+	<resultMap type="com.yiranpay.system.domain.SysNotice" id="SysNoticeResult">
+		<result property="noticeId"       column="notice_id"       />
+		<result property="noticeTitle"    column="notice_title"    />
+		<result property="noticeType"     column="notice_type"     />
+		<result property="noticeContent"  column="notice_content"  />
+		<result property="author"         column="author"          />
+		<result property="keyword"        column="keyword"         />
+		<result property="publishDate"    column="publish_date"    />
+		<result property="yuanwenLike"    column="yuanwenLike"     />
+
+		<result property="summary"        column="summary"         />
+		<result property="status"         column="status"          />
+		<result property="createBy"       column="create_by"       />
+		<result property="createTime"     column="create_time"     />
+		<result property="updateBy"       column="update_by"       />
+		<result property="updateTime"     column="update_time"     />
+		<result property="remark"         column="remark"          />
+
+	</resultMap>
+
+	<sql id="selectNoticeVo">
+        select notice_id, notice_title,author,keyword,publish_date,yuanwenLike,summary, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark
+		from sys_notice
+    </sql>
+
+	<select id="selectNoticeById" parameterType="Long" resultMap="SysNoticeResult">
+		<include refid="selectNoticeVo"/>
+		where notice_id = #{noticeId}
+	</select>
+
+	<select id="selectNoticeList" parameterType="SysNotice" resultMap="SysNoticeResult">
+		SELECT n.notice_id, n.notice_title,n.author,n.keyword,n.publish_date,n.yuanwenLike,n.summary,
+		n.notice_type, n.notice_content, n.status, n.create_by, n.create_time, n.update_by, n.update_time, n.remark
+		FROM sys_notice n
+
+
+		<where>
+			<if test="noticeTitle != null and noticeTitle != ''">
+				AND n.notice_title like concat('%', #{noticeTitle}, '%')
+			</if>
+			<if test="noticeType != null and noticeType != ''">
+				AND n.notice_type = #{noticeType}
+			</if>
+
+			<if test="createBy != null and createBy != ''">
+				AND n.create_by like concat('%', #{createBy}, '%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertNotice" parameterType="SysNotice">
+		insert into sys_notice (
+		<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
+		<if test="noticeType != null and noticeType != '' ">notice_type, </if>
+		<if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
+
+		<if test="author != null and author != '' ">author, </if>
+		<if test="keyword != null and keyword != '' ">keyword, </if>
+		<if test="publishDate != null and publishDate != '' ">publish_date, </if>
+		<if test="yuanwenLike != null and yuanwenLike != '' ">yuanwenLike, </if>
+		<if test="summary != null and summary != '' ">summary, </if>
+
+		<if test="status != null and status != '' ">status, </if>
+		<if test="remark != null and remark != ''">remark,</if>
+		<if test="createBy != null and createBy != ''">create_by,</if>
+		create_time
+		)values(
+		<if test="noticeTitle != null and noticeTitle != ''">#{noticeTitle}, </if>
+		<if test="noticeType != null and noticeType != ''">#{noticeType}, </if>
+		<if test="noticeContent != null and noticeContent != ''">#{noticeContent}, </if>
+
+		<if test="author != null and author != ''">#{author}, </if>
+		<if test="keyword != null and keyword != ''">#{keyword}, </if>
+		<if test="publishDate != null and publishDate != ''">#{publishDate}, </if>
+		<if test="yuanwenLike != null and yuanwenLike != ''">#{yuanwenLike}, </if>
+		<if test="summary != null and summary != ''">#{summary}, </if>
+		<if test="status != null and status != ''">#{status}, </if>
+		<if test="remark != null and remark != ''">#{remark},</if>
+		<if test="createBy != null and createBy != ''">#{createBy},</if>
+		sysdate()
+		)
+	</insert>
+
+	<update id="updateNotice" parameterType="SysNotice">
+		update sys_notice
+		<set>
+			<if test="noticeTitle != null and noticeTitle != ''">notice_title = #{noticeTitle}, </if>
+			<if test="noticeType != null and noticeType != ''">notice_type = #{noticeType}, </if>
+			<if test="noticeContent != null">notice_content = #{noticeContent}, </if>
+
+			<if test="status != null and status != ''">status = #{status}, </if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = sysdate()
+		</set>
+		where notice_id = #{noticeId}
+	</update>
+
+	<delete id="deleteNoticeByIds" parameterType="String">
+		delete from sys_notice where notice_id in
+		<foreach item="noticeId" collection="array" open="(" separator="," close=")">
+			#{noticeId}
+		</foreach>
+	</delete>
+
+
+	<update id="publish" parameterType="SysNotice">
+		update sys_notice
+		<set>
+
+			<if test="publishDate != null">publish_date = #{publishDate}, </if>
+
+			<if test="status != null and status != ''">status = #{status}, </if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = sysdate()
+		</set>
+		where notice_id = #{noticeId}
+	</update>
+</mapper>

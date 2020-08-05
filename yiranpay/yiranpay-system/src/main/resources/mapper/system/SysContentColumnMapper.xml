@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.system.mapper.SysContentColumnMapper">
+    
+    <resultMap type="SysContentColumn" id="ColumnResult">
+        <result property="id"    column="id"    />
+        <result property="customLink"    column="custom_link"    />
+        <result property="customLinkUrl"    column="custom_link_url"    />
+        <result property="isIndex"    column="is_index"    />
+        <result property="isTopNav"    column="is_top_nav"    />
+        <result property="name"    column="name"    />
+        <result property="orders"    column="orders"    />
+        <result property="recommend"    column="recommend"    />
+        <result property="status"    column="status"    />
+        <result property="type"    column="type"    />
+        <result property="pid"    column="pid"    />
+        <result property="navOrder"    column="nav_order"    />
+        <result property="parentName" column="parent_name" />
+        <result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+    </resultMap>
+	
+	<sql id="selectChannelVo">
+        select id, custom_link, custom_link_url, is_index, is_top_nav, name, orders, recommend, status, type, pid, nav_order,create_by, create_time,update_by, update_time from sys_content_column
+    </sql>
+    
+    <select id="selectChannelAll" resultMap="ColumnResult">
+		<include refid="selectChannelVo"/>
+	</select>
+	
+	<select id="checkDeptNameUnique" parameterType="String" resultMap="ColumnResult">
+	    <include refid="selectChannelVo"/>
+		where name=#{name}
+	</select>
+	
+    <select id="selectChannelList" parameterType="SysContentColumn" resultMap="ColumnResult">
+        <include refid="selectChannelVo"/>
+        <where>  
+            <if test="id != null and id != ''"> and id = #{id}</if>
+             <if test="customLink != null and customLink != ''"> and custom_link = #{customLink}</if>
+             <if test="customLinkUrl != null and customLinkUrl != ''"> and custom_link_url = #{customLinkUrl}</if>
+             <if test="isIndex != null and isIndex != ''"> and is_index = #{isIndex}</if>
+             <if test="isTopNav != null and isTopNav != ''"> and is_top_nav = #{isTopNav}</if>
+             <if test="name != null and name != ''"> and name = #{name}</if>
+             <if test="orders != null and orders != ''"> and orders = #{orders}</if>
+             <if test="recommend != null and recommend != ''"> and recommend = #{recommend}</if>
+             <if test="status != null and status != ''"> and status = #{status}</if>
+             <if test="type != null and type != ''"> and type = #{type}</if>
+             <if test="pid != null and pid != ''"> and pid = #{pid}</if>
+             <if test="navOrder != null and navOrder != ''"> and nav_order = #{navOrder}</if>
+         </where>
+    </select>
+    
+    <select id="selectChannelById" parameterType="Integer" resultMap="ColumnResult">
+        select t.id, t.custom_link, t.custom_link_url, t.is_index, t.is_top_nav, t.name, t.orders, t.recommend, t.status, t.type, t.pid, t.nav_order, 
+        	(select name from sys_content_column where id = t.pid) parent_name
+        from sys_content_column t
+          where t.id = #{id}
+    </select>
+        
+    <insert id="insertChannel" parameterType="SysContentColumn">
+        insert into sys_content_column (
+			<if test="id != null and id != '' ">id, </if>
+			custom_link,
+			<if test="customLinkUrl != null and customLinkUrl != '' ">custom_link_url, </if>
+			<if test="isIndex != null and isIndex != '' ">is_index, </if>
+			<if test="isTopNav != null and isTopNav != '' ">is_top_nav, </if>
+			<if test="name != null and name != '' ">name, </if>
+			<if test="orders != null and orders != '' ">orders, </if>
+			<if test="recommend != null and recommend != '' ">recommend, </if>
+			status,
+			<if test="type != null and type != '' ">type, </if>
+			<if test="pid != null and pid != '' ">pid, </if>
+			<if test="navOrder != null and navOrder != '' ">nav_order,</if>
+			<if test="createBy != null and createBy != ''">create_by,</if>
+ 			create_time
+        )values(
+			<if test="id != null and id != ''">#{id}, </if>
+			#{customLink},
+			<if test="customLinkUrl != null and customLinkUrl != ''">#{customLinkUrl}, </if>
+			<if test="isIndex != null and isIndex != ''">#{isIndex}, </if>
+			<if test="isTopNav != null and isTopNav != ''">#{isTopNav}, </if>
+			<if test="name != null and name != ''">#{name}, </if>
+			<if test="orders != null and orders != ''">#{orders}, </if>
+			<if test="recommend != null and recommend != ''">#{recommend}, </if>
+			#{status},
+			<if test="type != null and type != ''">#{type}, </if>
+			<if test="pid != null and pid != ''">#{pid}, </if>
+			<if test="navOrder != null and navOrder != ''">#{navOrder},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+ 			sysdate()
+		)
+    </insert>
+	 
+    <update id="updateChannel" parameterType="SysContentColumn">
+        update sys_content_column
+        <set>
+            custom_link = #{customLink}, 
+            custom_link_url = #{customLinkUrl},
+            is_index = #{isIndex}, 
+            is_top_nav = #{isTopNav}, 
+            name = #{name}, 
+            orders = #{orders},
+            recommend = #{recommend},
+            status = #{status},
+            type = #{type},
+            pid = #{pid},
+            nav_order = #{navOrder},
+            update_by = #{updateBy},
+ 			update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+	
+	<delete id="deleteChannelById" parameterType="Integer">
+        delete from sys_content_column where id = #{id}
+    </delete>
+	
+    <delete id="deleteChannelByIds" parameterType="String">
+        delete from sys_content_column where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectChannelCount" parameterType="SysContentColumn" resultType="int">
+		select count(*) from sys_content_column
+		<where>
+			<if test="id != null and id != 0"> and id = #{id} </if>
+			<if test="pid != null and pid != 0"> and pid = #{pid} </if>
+		</where>
+	</select>
+    
+</mapper>

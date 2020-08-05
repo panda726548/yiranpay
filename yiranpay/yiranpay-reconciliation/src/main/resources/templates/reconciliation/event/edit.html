@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改对账下载URL')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-event-edit" th:object="${reconciliationEvent}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" th:field="*{title}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">事件开始日期：</label>
+                <div class="col-sm-8">
+                    <input name="start" th:field="*{start}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">事件开始日期：</label>
+                <div class="col-sm-8">
+                    <input name="url" th:field="*{url}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">渠道编号：</label>
+                <div class="col-sm-8">
+                    <input name="channelcodes" th:field="*{channelcodes}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "reconciliation/event";
+        $("#form-event-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-event-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

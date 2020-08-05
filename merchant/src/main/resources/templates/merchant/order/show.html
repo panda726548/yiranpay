@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('交易详情')" />
+</head>
+<body>
+    <div class="main-content">
+    	<br/>
+    	<div class="col-sm-12">
+   			<blockquote class="text-success" style="font-size:14px;">
+             	<h3 style="color: green;"><i class="fa fa-check"></i>&nbsp;&nbsp;支付成功</h3>
+            </blockquote>
+        </div>
+        <br/>
+         <h4 class="form-header h4">交易信息</h4>
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">业务订单号：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.businessOrderNO}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">交易订单：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.tradeOrderNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">交易类型：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.tradeType}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">交易金额：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.amount}" class="form-control" style="border: none;color: red;"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">支付方式：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payMode}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">服务费：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.serviceFee}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">创建时间：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.creatTime}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">支付时间：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payTime}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-4">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">产品编码：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.productCode}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+          <h4 class="form-header h4">付款方信息</h4>
+          
+          <div class="row">
+         	<div class="col-sm-6" th:if="${order.payerInfo.openId} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">微信OpenId：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.openId}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-6" th:if="${order.payerInfo.orderName} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">订单名称：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.orderName}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-6" th:if="${order.payerInfo.accountName} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">账户名：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.accountName}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-6" th:if="${order.payerInfo.idNo} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">身份证号码：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.idNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         <div class="row">
+         	<div class="col-sm-6" th:if="${order.payerInfo.cardNo} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">银行卡号：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.cardNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-6" th:if="${order.payerInfo.mobileNo} != null">
+                 <div class="form-group">
+                     <label class="col-sm-4 control-label">手机号码：</label>
+                     <div class="col-sm-8">
+                         <span th:text="${order.payerInfo.mobileNo}" class="form-control" style="border: none"></span>
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div>
+    
+	<th:block th:include="include :: footer" />
+</body>
+</html>

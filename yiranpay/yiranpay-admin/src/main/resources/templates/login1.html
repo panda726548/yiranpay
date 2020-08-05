@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<title>聚合支付-商户登录</title>
+	
+	<link th:href="@{/login/css/bootstrap.min.css}"  type="text/css" rel="stylesheet">
+	<link th:href="@{/login/css/base_cwn.css}"  type="text/css" rel="stylesheet">
+	<!--element css-->
+	<link rel="stylesheet" th:href="@{/login/css/index.css}" >
+	<style>
+		.phoneContent {
+			display: none;
+		}
+
+		.submitForm {
+			width: 100%;
+			height: 44px;
+			background: linear-gradient(to right, #f14a5b, #ca2b3f);
+			color: #fff;
+			border-radius: 0;
+		}
+
+		@media screen and (max-width: 750px) {
+
+			html,
+			body {
+				min-width: inherit;
+			}
+
+			.pc {
+				display: none;
+			}
+
+			.phoneContent {
+				position: fixed;
+				left: 0;
+				top: 0;
+				display: flex;
+				width: 100%;
+				height: 100%;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.phone {
+				background: #fff;
+				padding: 20px;
+				border-radius: 5px;
+				width: 93.3333vw;
+			}
+
+			.loginbox {
+				width: 66.6667vw;
+				position: inherit;
+				left: inherit;
+				top: inherit;
+				margin-left: inherit;
+				margin-top: inherit;
+			}
+
+
+		}
+	</style>
+	<!--element css-->
+	
+<link th:href="@{/login/css/login.css}"  type="text/css" rel="stylesheet">
+<style>
+	.loginbox .form-control {
+		border-right: none;
+		border-left: none;
+		border-top: none
+	}
+</style>
+
+<link rel="stylesheet" th:href="@{/login/css/layer.css}" id="layuicss-layer"></head>
+	<script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+<body class="bgimg">
+<!--网站主体-->
+
+<div class="loginbox clearfix">
+	<div class="lo_left fl">
+		<h4 class="f30"><img th:src="@{/login/images/15789034188847534.jpg}" style="width: 100px"> 聚合支付</h4>
+		<ul>
+			<li>免签约</li>
+			<li>微信收款</li>
+			<li>支付宝收款</li>
+			<li>银联微信收款</li>
+			<li>银联支付宝收款</li>
+		</ul>
+	</div>
+	<div class="lo_right fr pc">
+		<h2 class="f30 ">账号登录</h2>
+		<div class="f12 c_9 pt30 user-name-txt">账号/手机号/邮箱</div>
+		<div class="login_txt">
+			<input type="text" name="username" class="form-control" placeholder="请输入用户名">
+		</div>
+		<div class="user-pass">
+			<div class="f12 c_9 pt30 user-pass-txt">密码</div>
+			<div class="login_txt">
+				<input type="password" name="password" class="form-control" placeholder="请输入密码">
+				<!--<span class="eye"></span>-->
+			</div>
+			<div >
+				<div class="f12 c_9 pt30 user-pass-txt">验证码</div>
+				<div >
+					<div class="login_txt" style="float:left">
+						<input type="text" name ="validateCode" class="form-control" placeholder="请输入验证码">
+					</div>
+					<div class="login_txt" style="float:right">
+						<a href="javascript:void(0);" title="点击更换验证码">
+							<img th:src="@{captcha/captchaImage(type=${captchaType})}" width="120" class="imgcode"/>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="pt30 mt15" style="margin-top:30px">
+				<input type="button" class="submitForm" value="登录">
+			</div>
+		</div>
+		<p class="pt30 login-action">
+			<!--<a href="#" class="blue">忘记密码</a>-->
+		</p>
+	</div>
+	
+</div>
+
+<!--网站主体-->
+
+
+
+<script th:src="@{/login/js/jquery.min.js}"></script>
+<script th:src="@{/login/js/bootstrap.min.js}"></script>
+<script th:src="@{/login/js/common.js}"></script>
+<!--element js-->
+<script th:src="@{/login/js/vue.js}"></script>
+<script th:src="@{/login/js/index.js}"></script>
+<!--element js-->
+<!--layer-->
+<script th:src="@{/login/js/layer.js}"></script>
+<!--layer-->
+<!--js-->
+<script th:inline="javascript">
+	var ctx = [[@{/}]]; var captchaType = [[${captchaType}]];
+	$(function () {
+		// 登录按钮
+		$('.submitForm').click(function () {
+			submitForm();
+		});
+
+		// 绑定回车事件
+		document.onkeyup = function(e){
+			e = e || window.event;
+			if(e.keyCode == 13){
+				submitForm();
+			}
+		};
+
+		// 提交
+		function submitForm () {
+			var name = $("input[name='username']").val()|| $("input[name='username']").val(), // 账号
+			passwd = $("input[name='passwd']").val()|| $("input[name='password']").val(), // 密码
+			validateCode = $("input[name='validateCode']").val()|| $("input[name='validateCode']").val(), // 验证码
+			specialStr = /[`~!@#$%^&*+<>{}\/'[\]]/im; // 判断特殊字符
+			//校验用户名
+			if ($.trim(name).length < 1) {
+				message('请输入用户名', 2);
+				return false;
+			} else if (specialStr.exec(name)) {
+				message('账号不能输入特殊字符', 2);
+				return false
+			} else {
+				$('#username').parent().removeClass('on');
+			}
+
+			//校验密码
+			if (passwd.length < 6 || passwd.length > 20) {
+				message('请输入6到20位的密码', 2);
+				return false;
+			} else {
+				$('#passwd').parent().removeClass('on');
+			}
+			
+			if (validateCode.length == 0 ) {
+				message('请输入验证码', 2);
+				return false;
+			} else {
+				$('#validateCode').parent().removeClass('on');
+			}
+			
+			$.ajax({
+		        type: "post",
+		        url: ctx + "login",
+		        data: {
+		            "username": name,
+		            "password": passwd,
+		            "validateCode" : validateCode,
+		            "rememberMe": false
+		        },
+		        success: function(r) {
+		            if (r.code == 0) {
+		                location.href = ctx + 'index';
+		            } else {
+		            	$('.imgcode').click();
+		            	$(".code").val("");
+		            	message(r.msg);
+		            }
+		        }
+		    });
+		}
+		
+		$('.imgcode').click(function() {
+			var url = ctx + "captcha/captchaImage?type=" + captchaType + "&s=" + Math.random();
+			$(".imgcode").attr("src", url);
+		});
+	});
+	
+</script>
+</body></html>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.reconciliation.mapper.ReconciliationLiquidationflowMapper">
+    
+    <resultMap type="ReconciliationLiquidationflow" id="ReconciliationLiquidationflowResult">
+        <result property="id"    column="id"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bizNo"    column="biz_no"    />
+        <result property="amount"    column="amount"    />
+        <result property="bankDate"    column="bank_date"    />
+        <result property="compareBatchNo"    column="compare_batch_no"    />
+        <result property="compareDate"    column="compare_date"    />
+        <result property="compareFlag"    column="compare_flag"    />
+        <result property="voucherNo"    column="voucher_no"    />
+        <result property="gmtCreate"    column="gmt_create"    />
+        <result property="gmtModified"    column="gmt_modified"    />
+        <result property="operator"    column="operator"    />
+        <result property="memo"    column="memo"    />
+        <result property="fundsChannel"    column="funds_channel"    />
+        <result property="bizType"    column="biz_type"    />
+        <result property="outNo"    column="out_no"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="hisFlag"    column="his_flag"    />
+        <result property="paymentSeqNo"    column="payment_seq_no"    />
+        <result property="drcr"    column="drcr"    />
+    </resultMap>
+
+    <sql id="selectReconciliationLiquidationflowVo">
+        select id, bank_code, biz_no, amount, bank_date, compare_batch_no, compare_date, compare_flag, voucher_no, gmt_create, gmt_modified, operator, memo, funds_channel, biz_type, out_no, file_name, his_flag, payment_seq_no, drcr from reconciliation_liquidationflow
+    </sql>
+
+    <select id="selectReconciliationLiquidationflowList" parameterType="ReconciliationLiquidationflow" resultMap="ReconciliationLiquidationflowResult">
+        <include refid="selectReconciliationLiquidationflowVo"/>
+        <where>  
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="bizNo != null  and bizNo != ''"> and biz_no = #{bizNo}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="bankDate != null  and bankDate != ''"> and bank_date = #{bankDate}</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''"> and compare_batch_no = #{compareBatchNo}</if>
+            <if test="compareDate != null  and compareDate != ''"> and compare_date = #{compareDate}</if>
+            <if test="compareFlag != null  and compareFlag != ''"> and compare_flag = #{compareFlag}</if>
+            <if test="voucherNo != null  and voucherNo != ''"> and voucher_no = #{voucherNo}</if>
+            <if test="gmtCreate != null "> and gmt_create = #{gmtCreate}</if>
+            <if test="gmtModified != null "> and gmt_modified = #{gmtModified}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+            <if test="fundsChannel != null  and fundsChannel != ''"> and funds_channel = #{fundsChannel}</if>
+            <if test="bizType != null  and bizType != ''"> and biz_type = #{bizType}</if>
+            <if test="outNo != null  and outNo != ''"> and out_no = #{outNo}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="hisFlag != null  and hisFlag != ''"> and his_flag = #{hisFlag}</if>
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''"> and payment_seq_no = #{paymentSeqNo}</if>
+            <if test="drcr != null  and drcr != ''"> and drcr = #{drcr}</if>
+        </where>
+    </select>
+    
+    <select id="selectReconciliationLiquidationflowById" parameterType="Long" resultMap="ReconciliationLiquidationflowResult">
+        <include refid="selectReconciliationLiquidationflowVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReconciliationLiquidationflow" parameterType="ReconciliationLiquidationflow" useGeneratedKeys="true" keyProperty="id">
+        insert into reconciliation_liquidationflow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bankCode != null  and bankCode != ''">bank_code,</if>
+            <if test="bizNo != null  and bizNo != ''">biz_no,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="bankDate != null  and bankDate != ''">bank_date,</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">compare_batch_no,</if>
+            <if test="compareDate != null  and compareDate != ''">compare_date,</if>
+            <if test="compareFlag != null  and compareFlag != ''">compare_flag,</if>
+            <if test="voucherNo != null  and voucherNo != ''">voucher_no,</if>
+            <if test="gmtCreate != null ">gmt_create,</if>
+            <if test="gmtModified != null ">gmt_modified,</if>
+            <if test="operator != null  and operator != ''">operator,</if>
+            <if test="memo != null  and memo != ''">memo,</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">funds_channel,</if>
+            <if test="bizType != null  and bizType != ''">biz_type,</if>
+            <if test="outNo != null  and outNo != ''">out_no,</if>
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="hisFlag != null  and hisFlag != ''">his_flag,</if>
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">payment_seq_no,</if>
+            <if test="drcr != null  and drcr != ''">drcr,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bankCode != null  and bankCode != ''">#{bankCode},</if>
+            <if test="bizNo != null  and bizNo != ''">#{bizNo},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="bankDate != null  and bankDate != ''">#{bankDate},</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">#{compareBatchNo},</if>
+            <if test="compareDate != null  and compareDate != ''">#{compareDate},</if>
+            <if test="compareFlag != null  and compareFlag != ''">#{compareFlag},</if>
+            <if test="voucherNo != null  and voucherNo != ''">#{voucherNo},</if>
+            <if test="gmtCreate != null ">#{gmtCreate},</if>
+            <if test="gmtModified != null ">#{gmtModified},</if>
+            <if test="operator != null  and operator != ''">#{operator},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">#{fundsChannel},</if>
+            <if test="bizType != null  and bizType != ''">#{bizType},</if>
+            <if test="outNo != null  and outNo != ''">#{outNo},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="hisFlag != null  and hisFlag != ''">#{hisFlag},</if>
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">#{paymentSeqNo},</if>
+            <if test="drcr != null  and drcr != ''">#{drcr},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReconciliationLiquidationflow" parameterType="ReconciliationLiquidationflow">
+        update reconciliation_liquidationflow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankCode != null  and bankCode != ''">bank_code = #{bankCode},</if>
+            <if test="bizNo != null  and bizNo != ''">biz_no = #{bizNo},</if>
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="bankDate != null  and bankDate != ''">bank_date = #{bankDate},</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">compare_batch_no = #{compareBatchNo},</if>
+            <if test="compareDate != null  and compareDate != ''">compare_date = #{compareDate},</if>
+            <if test="compareFlag != null  and compareFlag != ''">compare_flag = #{compareFlag},</if>
+            <if test="voucherNo != null  and voucherNo != ''">voucher_no = #{voucherNo},</if>
+            <if test="gmtCreate != null ">gmt_create = #{gmtCreate},</if>
+            <if test="gmtModified != null ">gmt_modified = #{gmtModified},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="memo != null  and memo != ''">memo = #{memo},</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">funds_channel = #{fundsChannel},</if>
+            <if test="bizType != null  and bizType != ''">biz_type = #{bizType},</if>
+            <if test="outNo != null  and outNo != ''">out_no = #{outNo},</if>
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="hisFlag != null  and hisFlag != ''">his_flag = #{hisFlag},</if>
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">payment_seq_no = #{paymentSeqNo},</if>
+            <if test="drcr != null  and drcr != ''">drcr = #{drcr},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReconciliationLiquidationflowById" parameterType="Long">
+        delete from reconciliation_liquidationflow where id = #{id}
+    </delete>
+
+    <delete id="deleteReconciliationLiquidationflowByIds" parameterType="String">
+        delete from reconciliation_liquidationflow where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

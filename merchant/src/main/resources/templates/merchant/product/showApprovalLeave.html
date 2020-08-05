@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间轴</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+
+    <div class="row animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div class="text-left float-e-margins p-md">
+	            <h4 class="form-header h4">产品信息</h4>
+	            <div class="row">
+		         	<div class="col-sm-6">
+		                 <div class="form-group">
+		                     <label class="col-sm-6 control-label">产品名称：</label>
+		                     <div class="col-sm-6" th:text="${proInfo.productName}"></div>
+		                 </div>
+		             </div>
+		             <div class="col-sm-6">
+		                 <div class="form-group">
+		                     <label class="col-sm-6 control-label">产品编码：</label>
+		                     <div class="col-sm-6" th:text="${proInfo.productCode}"></div>
+		                 </div>
+		             </div>
+	         	</div>
+            </div>
+            <div id="ibox-content">
+                 <div id="vertical-timeline" class="vertical-container light-timeline">
+                     <div class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-briefcase"></i>
+                         </div>
+                                          
+                     <div class="vertical-timeline-block" th:each="list: ${leaveList}">
+                         <div class="vertical-timeline-icon lazur-bg">
+                             <i class="fa fa-user-md"></i>
+                         </div>
+
+                         <div class="vertical-timeline-content">
+                             <h2 th:text="${list.comment}"></h2>
+                             <p>申请人:&nbsp;<span th:text="${list.userid}"></span></p>
+                             <span class="vertical-date">审批时间:&nbsp;<span th:text="${#dates.format(list.audittime, 'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script>
+        $(document).ready(function(){
+            $('#lightVersion').click(function(event) {
+                event.preventDefault()
+                $('#ibox-content').removeClass('ibox-content');
+                $('#vertical-timeline').removeClass('dark-timeline');
+                $('#vertical-timeline').addClass('light-timeline');
+            });
+            $('#darkVersion').click(function(event) {
+                event.preventDefault()
+                $('#ibox-content').addClass('ibox-content');
+                $('#vertical-timeline').removeClass('light-timeline');
+                $('#vertical-timeline').addClass('dark-timeline');
+            });
+        });
+    </script>
+</body>
+</html>

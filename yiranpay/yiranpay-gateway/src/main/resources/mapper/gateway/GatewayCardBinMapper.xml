@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayCardBinMapper">
+    
+    <resultMap type="GatewayCardBin" id="GatewayCardBinResult">
+        <result property="binId"    column="bin_id"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardName"    column="card_name"    />
+        <result property="binNo"    column="bin_no"    />
+        <result property="cardLength"    column="card_length"    />
+        <result property="bankNo"    column="bank_no"    />
+        <result property="extensions"    column="extensions"    />
+        <result property="enableFlag"    column="enable_flag"    />
+        <result property="memo"    column="memo"    />
+        <result property="version"    column="version"    />
+        <result property="gmtCreate"    column="gmt_create"    />
+        <result property="gmtModify"    column="gmt_modify"    />
+    </resultMap>
+
+    <sql id="selectGatewayCardBinVo">
+        select bin_id, bank_code, card_type, card_name, bin_no, card_length, bank_no, extensions, enable_flag, memo, version, gmt_create, gmt_modify from gateway_card_bin
+    </sql>
+
+    <select id="selectGatewayCardBinList" parameterType="GatewayCardBin" resultMap="GatewayCardBinResult">
+        <include refid="selectGatewayCardBinVo"/>
+        <where>  
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="cardType != null  and cardType != ''"> and card_type = #{cardType}</if>
+            <if test="cardName != null  and cardName != ''"> and card_name like concat('%', #{cardName}, '%')</if>
+            <if test="binNo != null  and binNo != ''"> and bin_no = #{binNo}</if>
+            <if test="cardLength != null "> and card_length = #{cardLength}</if>
+            <if test="bankNo != null  and bankNo != ''"> and bank_no = #{bankNo}</if>
+            <if test="extensions != null  and extensions != ''"> and extensions = #{extensions}</if>
+            <if test="enableFlag != null  and enableFlag != ''"> and enable_flag = #{enableFlag}</if>
+            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="gmtCreate != null "> and gmt_create = #{gmtCreate}</if>
+            <if test="gmtModify != null "> and gmt_modify = #{gmtModify}</if>
+        </where>
+    </select>
+    
+    <select id="selectGatewayCardBinById" parameterType="Long" resultMap="GatewayCardBinResult">
+        <include refid="selectGatewayCardBinVo"/>
+        where bin_id = #{binId}
+    </select>
+        
+    <insert id="insertGatewayCardBin" parameterType="GatewayCardBin">
+        insert into gateway_card_bin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="binId != null ">bin_id,</if>
+            <if test="bankCode != null  and bankCode != ''">bank_code,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="cardName != null  and cardName != ''">card_name,</if>
+            <if test="binNo != null  and binNo != ''">bin_no,</if>
+            <if test="cardLength != null ">card_length,</if>
+            <if test="bankNo != null  and bankNo != ''">bank_no,</if>
+            <if test="extensions != null  and extensions != ''">extensions,</if>
+            <if test="enableFlag != null  and enableFlag != ''">enable_flag,</if>
+            <if test="memo != null  and memo != ''">memo,</if>
+            <if test="version != null ">version,</if>
+            gmt_create,
+            gmt_modify
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="binId != null ">#{binId},</if>
+            <if test="bankCode != null  and bankCode != ''">#{bankCode},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="cardName != null  and cardName != ''">#{cardName},</if>
+            <if test="binNo != null  and binNo != ''">#{binNo},</if>
+            <if test="cardLength != null ">#{cardLength},</if>
+            <if test="bankNo != null  and bankNo != ''">#{bankNo},</if>
+            <if test="extensions != null  and extensions != ''">#{extensions},</if>
+            <if test="enableFlag != null  and enableFlag != ''">#{enableFlag},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="version != null ">#{version},</if>
+            sysdate(),
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateGatewayCardBin" parameterType="GatewayCardBin">
+        update gateway_card_bin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankCode != null  and bankCode != ''">bank_code = #{bankCode},</if>
+            <if test="cardType != null  and cardType != ''">card_type = #{cardType},</if>
+            <if test="cardName != null  and cardName != ''">card_name = #{cardName},</if>
+            <if test="binNo != null  and binNo != ''">bin_no = #{binNo},</if>
+            <if test="cardLength != null ">card_length = #{cardLength},</if>
+            <if test="bankNo != null  and bankNo != ''">bank_no = #{bankNo},</if>
+            <if test="extensions != null  and extensions != ''">extensions = #{extensions},</if>
+            <if test="enableFlag != null  and enableFlag != ''">enable_flag = #{enableFlag},</if>
+            <if test="memo != null  and memo != ''">memo = #{memo},</if>
+            <if test="version != null ">version = #{version},</if>
+            gmt_modify = sysdate()
+        </trim>
+        where bin_id = #{binId}
+    </update>
+
+    <delete id="deleteGatewayCardBinById" parameterType="Long">
+        delete from gateway_card_bin where bin_id = #{binId}
+    </delete>
+
+    <delete id="deleteGatewayCardBinByIds" parameterType="String">
+        delete from gateway_card_bin where bin_id in 
+        <foreach item="binId" collection="array" open="(" separator="," close=")">
+            #{binId}
+        </foreach>
+    </delete>
+    
+</mapper>

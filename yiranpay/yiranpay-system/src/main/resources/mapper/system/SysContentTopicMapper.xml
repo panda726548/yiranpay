@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.system.mapper.SysContentTopicMapper">
+    
+    <resultMap type="SysContentTopic" id="TopicResult">
+        <result property="id"    column="id"    />
+        <result property="author"    column="author"    />
+        <result property="channelPicId"    column="channel_pic_id"    />
+        <result property="topicContent"    column="content"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="publishDate"    column="publish_date"    />
+        <result property="recommend"    column="recommend"    />
+        <result property="status"    column="status"    />
+        <result property="summary"    column="summary"    />
+        <result property="title"    column="title"    />
+        <result property="cid"    column="cid"    />
+        <result property="uid"    column="uid"    />
+        <result property="cname"    column="cname"    />
+        <result property="newName"    column="new_name"    />
+        <result property="yuanwenLike"    column="yuanwenLike"    />
+        <result property="browseNumber"    column="browse_number"    />
+        <result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+		<association property="column"    column="cid" javaType="SysContentColumn" resultMap="channelResult"/>
+    </resultMap>
+    
+    <resultMap id="channelResult" type="SysContentColumn">
+		<result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="orders"    column="orders"    />
+        <result property="status"    column="status"    />
+        <result property="pid"    column="pid"    />
+	</resultMap>
+	
+	<sql id="selectTopicVo">
+        select id, author, channel_pic_id, content, keyword, publish_date, recommend, status, summary, title, cid, uid, cname, new_name, yuanwenLike, browse_number,create_by, create_time,update_by, update_time  from sys_content_topic
+    </sql>
+	
+    <select id="selectTopicList" parameterType="SysContentTopic" resultMap="TopicResult">
+        select t.id, t.author, t.channel_pic_id, t.content, t.keyword, t.publish_date, t.recommend, t.status, t.summary, t.title, t.cid, t.uid, t.cname, t.new_name, t.yuanwenLike, t.browse_number,t.create_by, t.create_time,t.update_by, t.update_time  from sys_content_topic t
+        	left join sys_content_column c on t.cid = c.id
+        where 1=1
+             <if test="status != null and status != ''"> 
+             	AND t.status = #{status}
+             </if>
+             <if test="title != null and title != ''"> 
+             	AND t.title = #{title}
+             </if>
+             <if test="params != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(t.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(t.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+			<if test="cid != null and pid != null and pid != 0 and cid != 1 and pid != 1">
+				AND t.cid IN (SELECT ch.id FROM sys_content_column ch WHERE ch.id = #{cid} OR ch.pid = #{pid})
+			</if>
+			order by t.create_time desc
+    </select>
+    
+    <select id="selectTopicById" parameterType="Integer" resultMap="TopicResult">
+        <include refid="selectTopicVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTopic" parameterType="SysContentTopic">
+        insert into sys_content_topic (
+			<if test="id != null and id != '' ">id, </if>
+			<if test="author != null and author != '' ">author, </if>
+			<if test="channelPicId != null and channelPicId != '' ">channel_pic_id, </if>
+			<if test="topicContent != null">content, </if>
+			<if test="keyword != null and keyword != '' ">keyword, </if>
+			<if test="publishDate != null ">publish_date, </if>
+			recommend, 
+			<if test="status != null ">status, </if>
+			<if test="summary != null and summary != '' ">summary, </if>
+			<if test="title != null and title != '' ">title, </if>
+			<if test="cid != null and cid != '' ">cid, </if>
+			<if test="uid != null and uid != '' ">uid, </if>
+			<if test="cname != null and cname != '' ">cname, </if>
+			<if test="newName != null and newName != '' ">new_name, </if>
+			<if test="yuanwenLike != null and yuanwenLike != '' ">yuanwenLike, </if>
+			<if test="browseNumber != null and browseNumber != '' ">browse_number,</if>
+			<if test="createBy != null and createBy != ''">create_by,</if>
+			create_time
+        )values(
+			<if test="id != null and id != ''">#{id}, </if>
+			<if test="author != null and author != ''">#{author}, </if>
+			<if test="channelPicId != null and channelPicId != ''">#{channelPicId}, </if>
+			<if test="topicContent != null ">#{topicContent}, </if>
+			<if test="keyword != null and keyword != ''">#{keyword}, </if>
+			<if test="publishDate != null ">#{publishDate}, </if>
+			#{recommend},
+			<if test="status != null">#{status}, </if>
+			<if test="summary != null and summary != ''">#{summary}, </if>
+			<if test="title != null and title != ''">#{title}, </if>
+			<if test="cid != null and cid != ''">#{cid}, </if>
+			<if test="uid != null and uid != ''">#{uid}, </if>
+			<if test="cname != null and cname != ''">#{cname}, </if>
+			<if test="newName != null and newName != ''">#{newName}, </if>
+			<if test="yuanwenLike != null and yuanwenLike != ''">#{yuanwenLike}, </if>
+			<if test="browseNumber != null and browseNumber != ''">#{browseNumber},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+			sysdate()
+		)
+    </insert>
+	 
+    <update id="updateTopic" parameterType="SysContentTopic">
+        update sys_content_topic
+        <set>
+            <if test="author != null and author != ''">author = #{author}, </if>
+            <if test="channelPicId != null and channelPicId != ''">channel_pic_id = #{channelPicId}, </if>
+            <if test="topicContent != null ">content = #{topicContent}, </if>
+            <if test="keyword != null and keyword != ''">keyword = #{keyword}, </if>
+            <if test="publishDate != null ">publish_date = #{publishDate}, </if>
+            recommend = #{recommend},
+            <if test="status != null">status = #{status}, </if>
+            <if test="summary != null and summary != ''">summary = #{summary}, </if>
+            <if test="title != null and title != ''">title = #{title}, </if>
+            <if test="cid != null and cid != ''">cid = #{cid}, </if>
+            <if test="uid != null and uid != ''">uid = #{uid}, </if>
+            <if test="cname != null and cname != ''">cname = #{cname}, </if>
+            <if test="newName != null and newName != ''">new_name = #{newName}, </if>
+            <if test="yuanwenLike != null and yuanwenLike != ''">yuanwenLike = #{yuanwenLike}, </if>
+            <if test="browseNumber != null and browseNumber != ''">browse_number = #{browseNumber},</if>
+            update_by = #{updateBy},
+ 			update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+	
+	<delete id="deleteTopicById" parameterType="Integer">
+        delete from sys_content_topic where id = #{id}
+    </delete>
+	
+    <delete id="deleteTopicByIds" parameterType="String">
+        delete from sys_content_topic where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

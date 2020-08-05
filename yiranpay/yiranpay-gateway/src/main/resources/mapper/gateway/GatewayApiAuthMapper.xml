@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.gateway.mapper.GatewayApiAuthMapper">
+    
+    <resultMap type="GatewayApiAuth" id="GatewayApiAuthResult">
+        <result property="apiId"    column="api_id"    />
+        <result property="merchantId"    column="merchant_id"    />
+    </resultMap>
+
+    <sql id="selectGatewayApiAuthVo">
+        select api_id, merchant_id from gateway_api_auth
+    </sql>
+
+    <select id="selectGatewayApiAuthList" parameterType="GatewayApiAuth" resultMap="GatewayApiAuthResult">
+        <include refid="selectGatewayApiAuthVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectGatewayApiAuthById" parameterType="Long" resultMap="GatewayApiAuthResult">
+        <include refid="selectGatewayApiAuthVo"/>
+        where api_id = #{apiId}
+    </select>
+        
+    <insert id="insertGatewayApiAuth" parameterType="GatewayApiAuth">
+        insert into gateway_api_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="apiId != null ">api_id,</if>
+            <if test="merchantId != null ">merchant_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="apiId != null ">#{apiId},</if>
+            <if test="merchantId != null ">#{merchantId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGatewayApiAuth" parameterType="GatewayApiAuth">
+        update gateway_api_auth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantId != null ">merchant_id = #{merchantId},</if>
+        </trim>
+        where api_id = #{apiId}
+    </update>
+
+    <delete id="deleteGatewayApiAuthById" parameterType="Long">
+        delete from gateway_api_auth where api_id = #{apiId}
+    </delete>
+    
+    <delete id="deleteGatewayApiAuthByMerchantId" parameterType="String">
+        delete from gateway_api_auth where merchant_id = #{merchantId}
+    </delete>
+
+    <delete id="deleteGatewayApiAuthByIds" parameterType="String">
+        delete from gateway_api_auth where api_id in 
+        <foreach item="apiId" collection="array" open="(" separator="," close=")">
+            #{apiId}
+        </foreach>
+    </delete>
+    
+    <insert id="batchApiMenuAuth">
+		insert into gateway_api_auth(api_id, merchant_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			(#{item.apiId},#{item.merchantId})
+		</foreach>
+	</insert>
+    
+</mapper>

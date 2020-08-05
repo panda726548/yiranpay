@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8">
+<title>依然聚合支付-商户管理系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- CSS -->
+
+<link rel="stylesheet" th:href="@{/html5_login/css/supersized.css}">
+<link rel="stylesheet" th:href="@{/html5_login/css/login.css}">
+<link th:href="@{/html5_login/css/bootstrap.min.css}" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	<script src="js/html5.js"></script>
+<![endif]-->
+<script th:src="@{/html5_login/js/jquery-1.8.2.min.js}"></script>
+<script type="text/javascript" th:src="@{/html5_login/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/html5_login/js/tooltips.js}"></script>
+</head>
+
+<body>
+
+<div class="page-container">
+	<div class="main_box">
+		<div class="login_box">
+			<div class="login_logo">
+				<h3>依然聚合支付-商户后台</h3>
+			</div>
+		
+			<div class="login_form">
+				<form action="index.html" id="login_form" method="post">
+					<div class="form-group">
+						<label for="j_username" class="t">用户名：</label> 
+						<input id="username" value="" name="username" type="text" class="form-control x319 in" 
+						autocomplete="off">
+					</div>
+					<div class="form-group">
+						<label for="j_password" class="t">密　码：</label> 
+						<input id="password" value="" name="password" type="password" 
+						class="password form-control x319 in">
+					</div>
+					<div class="form-group">
+						<label for="j_captcha" class="t">验证码：</label>
+						 <input id="validateCode" name="validateCode" type="text" class="form-control x164 in">
+						 <a href="javascript:void(0);" title="点击更换验证码">
+						 	<img id="captcha_img" alt="点击更换" title="点击更换" th:src="@{captcha/captchaImage(type=${captchaType})}" class="m">
+						 </a>
+					</div>
+					<div class="form-group space">
+						<label class="t"></label>　　　
+						<button type="button"  id="submit_btn" 
+						class="btn btn-primary btn-lg">&nbsp;登&nbsp;录&nbsp </button>
+						<input type="reset" value="&nbsp;重&nbsp;置&nbsp;" class="btn btn-default btn-lg">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="bottom">Copyright &copy; 2020 - 2021 <a href="#"></a></div>
+	</div>
+</div>
+
+<!-- Javascript -->
+
+<script th:src="@{/html5_login/js/supersized.3.2.7.min.js}"></script>
+<script th:src="@{/html5_login/js/supersized-init.js}"></script>
+<script th:src="@{/html5_login/js/scripts.js}"></script>
+<script th:inline="javascript">
+	var ctx = [[@{/}]]; var captchaType = [[${captchaType}]];
+	$(function() {
+		$('.m').click(function() {
+			var url = ctx + "captcha/captchaImage?type=" + captchaType + "&s=" + Math.random();
+			$(".m").attr("src", url);
+		});
+	});
+	
+	document.onkeydown = function(e){
+		if($(".bac").length==0)
+		{
+			if(!e) e = window.event;
+			if((e.keyCode || e.which) == 13){
+				var obtnLogin=document.getElementById("submit_btn")
+				obtnLogin.focus();
+			}
+		}
+	}
+
+	$(function(){
+		//提交表单
+		$('#submit_btn').click(function(){
+			var name = $("input[name='username']").val()|| $("input[name='username']").val(), // 账号
+			passwd = $("input[name='password']").val()|| $("input[name='password']").val(), // 密码
+			validateCode = $("input[name='validateCode']").val()|| $("input[name='validateCode']").val(); // 验证码
+			show_loading();
+			if(name == ''){
+				show_err_msg('请输入用户名，用户名不能为空');	
+				$('#username').focus();
+			}else if(passwd == ''){
+				show_err_msg('请输入密码，密码不能为空');
+				$('#password').focus();
+			}else if(validateCode == ''){
+				show_err_msg('请输入验证码，验证码不能为空');
+				$('#password').focus();
+			}else{
+				$.ajax({
+			        type: "post",
+			        url: ctx + "login",
+			        data: {
+			            "username": name,
+			            "password": passwd,
+			            "validateCode" : validateCode,
+			            "rememberMe": false
+			        },
+			        success: function(r) {
+			            if (r.code == 0) {
+			            	show_msg('登录成功咯！  正在为您跳转...','/');	
+			                location.href = ctx + 'index';
+			            } else {
+			            	$('.imgcode').click();
+			            	$(".code").val("");
+			            	message(r.msg);
+			            }
+			        }
+			    });
+				
+			}
+		});
+	});
+</script>
+</body>
+</html>

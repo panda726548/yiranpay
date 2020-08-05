@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+	name="viewport">
+<title>PC端支付 DEMO测试页</title>
+<link href="css/Reset.css" rel="stylesheet" type="text/css">
+<link href="css/main12.css" rel="stylesheet" type="text/css">
+<link href="css/yr-ui.css" rel="stylesheet" type="text/css">
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/cashier.js"></script>
+<script src="ajax/libs/blockUI/jquery.blockUI.js"></script>
+<script src="js/qrcode.js"></script>
+<style>
+
+.immediate_pay {
+	border: none;
+}
+
+.PayMethod12 {
+	min-height: 150px;
+}
+
+@media screen and (max-width: 700px) {
+	.PayMethod12 {
+		padding-top: 0;
+	}
+	.order-amount12 {
+		margin-bottom: 0;
+	}
+	.order-amount12, .PayMethod12 {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.order-amount12-right input {
+	border: 1px solid #efefef;
+	width: 6em;
+	padding: 5px 20px;
+	font-size: 15px;
+	text-indent: 0.5em;
+	line-height: 1.8em;
+}
+
+.si_PayMethod12 {
+	width: 1010px;
+	padding: 35px 35px;
+	background: #fff;
+	margin-top: 36px;
+}
+
+.si_PayMethod12 h2 {
+	font-size: 16px;
+	height: 30px;
+	line-height: 30px;
+	/*margin-bottom: 10px;*/
+}
+
+.si_PayMethod12 ul {
+	overflow: hidden;
+}
+
+.si_PayMethod12 ul li {
+	padding: 20px 0 0 30px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.si_PayMethod12 ul li .iw {
+	display: inline-block;
+	vertical-align: middle;
+	width: 114px;
+	height: 25px;
+	padding-top: 5px;
+	padding-left: 10px;
+	background: url(bank_logo.png) no-repeat;
+	border: #DDD solid 1px;
+	text-indent: -9999px;
+}
+
+</style>
+</head>
+<body style="background-color: #f9f9f9">
+	<!--导航-->
+	<div class="w100 navBD12">
+		<div class="w1080 nav12">
+			<div class="nav12-left">
+				<span class="contact">YiRanPay聚合支付 体验收银台</span>
+			</div>
+			<div class="nav12-right">
+				<span class="contact">仅供测试，请勿大金额付款</span>
+			</div>
+		</div>
+	</div>
+		<div class="immediate-pay12-center" >
+            <p class="immediate-pay12-center" style="margin-top: 5px;">
+            	<div>
+		            <img id="qrcode_img_default" alt="" src="images/default.png">
+		            <div id="qrcode_img" ></div>
+				</div>
+            </p>
+		</div>
+	<script type="text/javascript">
+		$(function () {
+			$("#qrcode_img_default").hide();
+			$("#qrcode_img").show();
+			qrcode.clear() //清除二维码 
+	        qrcode.makeCode(localStorage.getItem('codeUrl')) //生成另一个新的二维码
+		})
+		 //二维码
+		var qrcode = new QRCode("qrcode_img", {
+		    text: "",
+		    width: 245,
+		    height: 245,
+		    colorDark : "#000000",
+		    colorLight : "#ffffff",
+		    correctLevel : QRCode.CorrectLevel.H
+		});
+		 
+	</script>
+
+</body>
+</html>

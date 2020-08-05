@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('通知公告列表')" />
+	<th:block th:include="include :: layout-latest-css" />
+	<th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+
+	<div class="ui-layout-center">
+    <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+
+				<form id="notice-form">
+					<input type="hidden" id="columnId" name="columnId">
+					<input type="hidden" id="parentId" name="parentId">
+					<div class="select-list">
+						<ul>
+							<li>
+								公告标题：<input type="text" name="noticeTitle"/>
+							</li>
+							<li>
+								操作人员：<input type="text" name="createBy"/>
+							</li>
+							<li>
+								公告类型：<select name="noticeType" th:with="type=${@dict.getType('sys_notice_type')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:notice:add">
+		            <i class="fa fa-plus"></i> 新增
+		        </a>
+		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:notice:edit">
+		            <i class="fa fa-edit"></i> 修改
+		        </a>
+		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:notice:remove">
+		            <i class="fa fa-remove"></i> 删除
+		        </a>
+	        </div>
+	        
+	        <div class="col-sm-12 select-table table-striped">
+	            <table id="bootstrap-table"></table>
+	        </div>
+    	</div>
+    </div>
+	</div>
+    <th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+    <script th:inline="javascript">
+
+        var editFlag = [[${@permission.hasPermi('system:notice:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:notice:remove')}]];
+        var types = [[${@dict.getType('sys_notice_type')}]];
+        var datas = [[${@dict.getType('sys_notice_status')}]];
+        var prefix = ctx + "system/notice";
+		$(function() {
+			notice();
+
+		});
+
+
+
+      function notice() {
+		  var options = {
+			  url: prefix + "/list",
+			  createUrl: prefix + "/add",
+			  updateUrl: prefix + "/edit/{id}",
+			  removeUrl: prefix + "/remove",
+			  modalName: "公告",
+			  columns: [{
+				  checkbox: true
+			  },
+				  {
+					  field : 'noticeId',
+					  title : '序号'
+				  },
+				  {
+					  field : 'author',
+					  title : '作者'
+				  },
+
+				  {
+					  field : 'noticeTitle',
+					  title : '公告标题'
+				  },
+				  {
+					  field: 'noticeType',
+					  title: '公告类型',
+					  align: 'center',
+					  formatter: function(value, row, index) {
+						  return $.table.selectDictLabel(types, value);
+					  }
+				  },
+				  {
+					  field: 'status',
+					  title: '状态',
+					  align: 'center',
+					  formatter: function(value, row, index) {
+					  	if (row.status=='1'){
+					  		return "<span>已发布</span>";
+						}else
+						  return "<span>未发布</span>";
+					  }
+				  },
+
+
+				  {
+					  title: '操作',
+					  align: 'center',
+					  formatter: function(value, row, index) {
+						  var actions = [];
+						  if (row.status=='0') {
+							  actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+							  actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.noticeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+							  actions.push('<a class="btn btn-success btn-xs '  + '" href="javascript:void(0)" onclick="publish(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>发布</a>');
+						  }
+						  actions.push('<a class="btn btn-success btn-xs '  + '" href="javascript:void(0)" onclick="preview(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>预览</a>');
+						  return actions.join('');
+					  }
+				  }]
+		  };
+		  $.table.init(options);
+	  }
+
+		/**
+		 * 发布
+		 * @param noticeId
+		 */
+	  function publish(noticeId) {
+
+		  $.operate.save(prefix + "/publish", {"noticeId":noticeId});
+
+	  }
+
+		/**
+		 * 预览
+		 * @param noticeId
+		 */
+	  function preview(noticeId) {
+
+		  var url = prefix + "/preview/" + noticeId;
+		  $.modal.openTab("预览", url);
+	  }
+    </script>
+</body>
+</html>

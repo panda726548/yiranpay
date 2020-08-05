@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.tool.ues.mapper.SysUesEnDataMapper">
+    
+    <resultMap type="SysUesEnData" id="SysUesEnDataResult">
+        <result property="id"    column="id"    />
+        <result property="ticket"    column="ticket"    />
+        <result property="encryptKey"    column="encrypt_key"    />
+        <result property="encryptData"    column="encrypt_data"    />
+        <result property="version"    column="version"    />
+        <result property="encryptType"    column="encrypt_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysUesEnDataVo">
+        select id, ticket, encrypt_key, encrypt_data, version, encrypt_type, create_by, create_time, update_by, update_time, remark from sys_ues_en_data
+    </sql>
+
+    <select id="selectSysUesEnDataList" parameterType="SysUesEnData" resultMap="SysUesEnDataResult">
+        <include refid="selectSysUesEnDataVo"/>
+        <where>  
+            <if test="ticket != null  and ticket != ''"> and ticket = #{ticket}</if>
+            <if test="encryptKey != null  and encryptKey != ''"> and encrypt_key = #{encryptKey}</if>
+            <if test="encryptData != null  and encryptData != ''"> and encrypt_data = #{encryptData}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="encryptType != null  and encryptType != ''"> and encrypt_type = #{encryptType}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="selectUesEnDataByTicket" parameterType="String" resultMap="SysUesEnDataResult">
+        <include refid="selectSysUesEnDataVo"/>
+        where ticket = #{ticket}
+    </select>
+    
+    <select id="selectSysUesEnDataByPassword" parameterType="String" resultMap="SysUesEnDataResult">
+        <include refid="selectSysUesEnDataVo"/>
+        where encryptKey = #{encryptKey}
+    </select>
+    
+    <select id="selectSysUesEnDataById" parameterType="Long" resultMap="SysUesEnDataResult">
+        <include refid="selectSysUesEnDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysUesEnData" parameterType="SysUesEnData" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_ues_en_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ticket != null  and ticket != ''">ticket,</if>
+            <if test="encryptKey != null  and encryptKey != ''">encrypt_key,</if>
+            <if test="encryptData != null  and encryptData != ''">encrypt_data,</if>
+            <if test="version != null  and version != ''">version,</if>
+            <if test="encryptType != null  and encryptType != ''">encrypt_type,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ticket != null  and ticket != ''">#{ticket},</if>
+            <if test="encryptKey != null  and encryptKey != ''">#{encryptKey},</if>
+            <if test="encryptData != null  and encryptData != ''">#{encryptData},</if>
+            <if test="version != null  and version != ''">#{version},</if>
+            <if test="encryptType != null  and encryptType != ''">#{encryptType},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysUesEnData" parameterType="SysUesEnData">
+        update sys_ues_en_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ticket != null  and ticket != ''">ticket = #{ticket},</if>
+            <if test="encryptKey != null  and encryptKey != ''">encrypt_key = #{encryptKey},</if>
+            <if test="encryptData != null  and encryptData != ''">encrypt_data = #{encryptData},</if>
+            <if test="version != null  and version != ''">version = #{version},</if>
+            <if test="encryptType != null  and encryptType != ''">encrypt_type = #{encryptType},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysUesEnDataById" parameterType="Long">
+        delete from sys_ues_en_data where id = #{id}
+    </delete>
+
+    <delete id="deleteSysUesEnDataByIds" parameterType="String">
+        delete from sys_ues_en_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

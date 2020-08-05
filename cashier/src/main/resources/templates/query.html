@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+	name="viewport">
+<title>PC端支付 DEMO测试页</title>
+<link href="css/Reset.css" rel="stylesheet" type="text/css">
+<link href="css/main12.css" rel="stylesheet" type="text/css">
+<link href="css/yr-ui.css" rel="stylesheet" type="text/css">
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/cashier.js"></script>
+<script src="ajax/libs/blockUI/jquery.blockUI.js"></script>
+
+<style>
+
+.immediate_pay {
+	border: none;
+}
+
+.PayMethod12 {
+	min-height: 150px;
+}
+
+@media screen and (max-width: 700px) {
+	.PayMethod12 {
+		padding-top: 0;
+	}
+	.order-amount12 {
+		margin-bottom: 0;
+	}
+	.order-amount12, .PayMethod12 {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.order-amount12-right input {
+	border: 1px solid #efefef;
+	width: 6em;
+	padding: 5px 20px;
+	font-size: 15px;
+	text-indent: 0.5em;
+	line-height: 1.8em;
+}
+
+.si_PayMethod12 {
+	width: 1010px;
+	padding: 35px 35px;
+	background: #fff;
+	margin-top: 36px;
+}
+
+.si_PayMethod12 h2 {
+	font-size: 16px;
+	height: 30px;
+	line-height: 30px;
+	/*margin-bottom: 10px;*/
+}
+
+.si_PayMethod12 ul {
+	overflow: hidden;
+}
+
+.si_PayMethod12 ul li {
+	padding: 20px 0 0 30px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.si_PayMethod12 ul li .iw {
+	display: inline-block;
+	vertical-align: middle;
+	width: 114px;
+	height: 25px;
+	padding-top: 5px;
+	padding-left: 10px;
+	background: url(bank_logo.png) no-repeat;
+	border: #DDD solid 1px;
+	text-indent: -9999px;
+}
+
+</style>
+<script>
+		var OrderRequest = function OrderRequest(orderNo){
+			this.orderNo = orderNo;
+		}
+        $(function () {
+           
+            //点击立即支付按钮
+            $(".immediate_pay").click(function () {
+               var orderNo =  $("#orderNo").val();
+               if("" == orderNo){
+            	   message_show("请选输入查询订单号");
+            	   return false;
+               }
+               loading("查询中请稍后....");
+               var order = new  OrderRequest(orderNo);
+               var jsondata = JSON.stringify(order);
+               $.ajax({
+           		type: "post",
+           		url: "/queryOrder",
+           		data: jsondata,
+				//参数格式为json
+				contentType: "application/json; charset=utf-8",
+           		success: function (data) {
+           			closeLoading(); 
+           			if(data.data.payStatus == 'S'){
+           				message_show("支付结果：支付成功");
+           			}else if(data.data.payStatus == 'I'){
+           				message_show("支付结果：处理中");
+           			}else if(data.data.payStatus == 'F'){
+           				message_show("支付结果：支付失败;原因："+data.data.errorMessage);
+           			}
+           			
+           		},
+           		//调用出错执行的函数
+                   error: function(){
+                   	closeLoading();
+                   	message_show("查询失败!");
+                   }
+           	});
+
+            });
+        })
+</script>
+
+
+</head>
+<body style="background-color: #f9f9f9">
+	<!--导航-->
+	<div class="w100 navBD12">
+		<div class="w1080 nav12">
+			<div class="nav12-left">
+				<span class="contact">YiRanPay聚合支付 体验收银台</span>
+			</div>
+			<div class="nav12-right">
+				<span class="contact">仅供测试，请勿大金额付款</span>
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="w1080 immediate-pay12"
+		style="border-radius: 1em; padding-top: 1em; padding-bottom: 1em; padding-right: 1em;">
+		<div class="immediate-pay12-left">
+			<span>商户订单号：</span><input id="orderNo" type="text" name="orderNo" >
+		</div>
+		<div class="immediate-pay12-right">
+			<button type="button" class="immediate_pay">查询结果</button>
+		</div>
+	</div>
+	<div class="mt_agree">
+		<div class="mt_agree_main">
+			<h2>提示信息</h2>
+			<p id="errorContent" style="text-align: center; line-height: 36px;"></p>
+			<a class="close_btn" onclick="message_hide()">确定</a>
+		</div>
+	</div>
+	<!--底部-->
+	<div class="w1080 footer12">
+		<p>Copyright © 2017-2020 依然聚合支付 版权所有</p>
+	</div>
+	<script type="text/javascript">
+		function message_show(message) {
+			$("#errorContent").html(message);
+			$('.mt_agree').fadeIn(300);
+		}
+
+		function message_hide() {
+			$('.mt_agree').fadeOut(300);
+		}
+	</script>
+
+</body>
+</html>

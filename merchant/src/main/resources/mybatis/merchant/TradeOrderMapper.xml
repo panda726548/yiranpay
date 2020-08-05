@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.merchant.order.mapper.TradeOrderMapper">
+    
+    <resultMap type="com.yiran.project.merchant.order.domain.TradeOrder" id="TradeOrderResult">
+        <result property="memberId"    column="member_id"    />
+        <result property="businessOrderNO"    column="payment_seq_no"    />
+        <result property="tradeOrderNo"    column="inst_order_no"    />
+        <result property="tradeType"    column="inst_code"    />
+        <result property="payMode"    column="pay_mode"    />
+        <result property="amount"    column="amount"    />
+        <result property="status"    column="status"    />
+        <result property="creatTime"    column="gmt_create"    />
+        <result property="payTime"    column="gmt_modified"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="extend"    column="extension"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="totalCount"    column="total_count"    />
+    </resultMap>
+	
+	
+    <select id="selectTradeOrderList" parameterType="TradeOrder" resultMap="TradeOrderResult">
+    	SELECT
+			c.member_id,
+			c.payment_seq_no,
+			o.inst_order_no,
+			o.inst_code,
+			c.pay_mode,
+			c.amount,
+			c.`status`,
+			c.gmt_create,
+			c.gmt_modified,
+			c.product_code,
+			c.extension
+		FROM
+			channel_pay_order c,
+			pay_inst_order o
+		<where>
+			and c.inst_order_id = o.inst_order_id
+			and c.`status` = 'S'
+			and c.member_id = #{memberId}
+			<if test="params.businessOrderNO != null and params.businessOrderNO != ''"><!-- 业务订单号 -->
+				and c.payment_seq_no = #{params.businessOrderNO}
+			</if>
+			<if test="params.tradeOrderNo != null and params.tradeOrderNo != ''"><!-- 交易订单号 -->
+				and o.inst_order_no = #{params.tradeOrderNo}
+			</if>
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(c.gmt_modified,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(c.gmt_modified,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+		</where>		
+		order by c.gmt_create desc
+    </select>
+    
+    <select id="selectTradeOrderList10s" parameterType="TradeOrder" resultMap="TradeOrderResult">
+    	SELECT
+			c.member_id,
+			c.payment_seq_no,
+			o.inst_order_no,
+			o.inst_code,
+			c.pay_mode,
+			c.amount,
+			c.`status`,
+			c.gmt_create,
+			c.gmt_modified,
+			c.product_code,
+			c.extension
+		FROM
+			channel_pay_order c,
+			pay_inst_order o
+		where c.inst_order_id = o.inst_order_id
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+		order by c.gmt_create desc
+		LIMIT 10
+    </select>
+    
+    <select id="geTodayTradeMoney" parameterType="String" resultType="Double">
+    	SELECT
+		
+			COALESCE(sum(c.amount),0)
+			
+		FROM
+			channel_pay_order c
+			
+		where date_format(c.gmt_create, '%Y-%m-%d') = DATE_FORMAT(#{today}, '%Y-%m-%d')
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+    </select>
+    
+    <select id="getYesterdayTradeMoney" parameterType="String" resultType="Double">
+    	SELECT
+		
+			COALESCE(sum(c.amount),0)
+			
+		FROM
+			channel_pay_order c
+			
+		where date_format(c.gmt_create, '%Y-%m-%d') = DATE_FORMAT(#{yesterday}, '%Y-%m-%d')
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+    </select>
+    
+    
+    
+    <select id="geTodayTradeCount" parameterType="String" resultType="Integer">
+    	SELECT
+		
+			count(1)
+			
+		FROM
+			channel_pay_order c
+			
+		where date_format(c.gmt_create, '%Y-%m-%d') = DATE_FORMAT(#{today}, '%Y-%m-%d')
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+    </select>
+    
+    <select id="getYesterdayTradeCount" parameterType="String" resultType="Integer">
+    	SELECT
+		
+			count(1)
+			
+		FROM
+			channel_pay_order c
+			
+		where date_format(c.gmt_create, '%Y-%m-%d') = DATE_FORMAT(#{yesterday}, '%Y-%m-%d')
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+    </select>
+    
+    
+    <select id="selectTradeOrderByInstOrderNo" resultMap="TradeOrderResult">
+    	SELECT
+			c.member_id,
+			c.payment_seq_no,
+			o.inst_order_no,
+			o.inst_code,
+			c.pay_mode,
+			c.amount,
+			c.`status`,
+			c.gmt_create,
+			c.gmt_modified,
+			c.product_code,
+			c.extension
+		FROM
+			channel_pay_order c,
+			pay_inst_order o
+		where c.inst_order_id = o.inst_order_id
+		and c.`status` = 'S'
+		and c.member_id = #{memberId}
+		and o.inst_order_no = #{instOrderNO}
+    </select>
+    
+</mapper>

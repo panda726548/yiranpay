@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--360浏览器优先以webkit内核解析-->
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+	<link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+	<link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+
+
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper" style="padding: 5px 10px 1px 10px;">
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-primary pull-right">今天</span>
+					<h5 >新收公告</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins"  >
+						<a href="/system/notice" th:text="${noticeToday}"></a>
+					</h1>
+
+					<small>/ 个</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-info pull-right">全部</span>
+					<h5>未读公告</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" >
+						<a href="/system/notice" th:text="${noticeNoRead}"></a>
+					</h1>
+
+					<small>/ 个</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-success pull-right">全部</span>
+					<h5>待交付订单</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins"></h1>
+					<small>/ 笔</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-danger pull-right">全部</span>
+					<h5>取消订单</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" ></h1>
+
+					<small>/ 笔</small>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper" style="padding: 5px 10px 1px 10px;">
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-primary pull-right">今天</span>
+					<h5>交易金额</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" ></h1>
+
+					<small>元</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-danger pull-right">今天</span>
+					<h5>退款金额</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" ></h1>
+
+					<small>/ 元</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-danger pull-right">全部</span>
+					<h5>退款待审核</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" ></h1>
+					<small>/ 笔</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<span class="label label-info pull-right">全部</span>
+					<h5>已完成订单</h5>
+				</div>
+				<div class="ibox-content">
+					<h1 class="no-margins" ></h1>
+
+					<small>/ 笔</small>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+</body>
+</html>

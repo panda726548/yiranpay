@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+	name="viewport">
+<title>PC端支付 DEMO测试页</title>
+<link href="css/Reset.css" rel="stylesheet" type="text/css">
+<link href="css/main12.css" rel="stylesheet" type="text/css">
+<link href="css/yr-ui.css" rel="stylesheet" type="text/css">
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/cashier.js"></script>
+<script src="ajax/libs/blockUI/jquery.blockUI.js"></script>
+<style>
+.pay_li input {
+	display: none;
+}
+
+.immediate_pay {
+	border: none;
+}
+
+.PayMethod12 {
+	min-height: 150px;
+}
+
+@media screen and (max-width: 700px) {
+	.PayMethod12 {
+		padding-top: 0;
+	}
+	.order-amount12 {
+		margin-bottom: 0;
+	}
+	.order-amount12, .PayMethod12 {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.order-amount12-right input {
+	border: 1px solid #efefef;
+	width: 6em;
+	padding: 5px 20px;
+	font-size: 15px;
+	text-indent: 0.5em;
+	line-height: 1.8em;
+}
+
+.si_PayMethod12 {
+	width: 1010px;
+	padding: 35px 35px;
+	background: #fff;
+	margin-top: 36px;
+}
+
+.si_PayMethod12 h2 {
+	font-size: 16px;
+	height: 30px;
+	line-height: 30px;
+	/*margin-bottom: 10px;*/
+}
+
+.si_PayMethod12 ul {
+	overflow: hidden;
+}
+
+.si_PayMethod12 ul li {
+	padding: 20px 0 0 30px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.si_PayMethod12 ul li .iw {
+	display: inline-block;
+	vertical-align: middle;
+	width: 114px;
+	height: 25px;
+	padding-top: 5px;
+	padding-left: 10px;
+	background: url(bank_logo.png) no-repeat;
+	border: #DDD solid 1px;
+	text-indent: -9999px;
+}
+	img{max-width: 100%; height: auto;}
+	.weixin-tip{display: none; position: fixed; left:0; top:0; bottom:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80);  height: 100%; width: 100%; z-index: 100;}
+	.weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;}
+</style>
+
+
+
+</head>
+<body style="background-color: #f9f9f9">
+	
+	<!--导航-->
+	<div class="w100 navBD12">
+		<div class="w1080 nav12">
+			<div class="nav12-left">
+				<span class="contact">YiRanPay聚合支付 体验收银台</span>
+			</div>
+			<div class="nav12-right">
+				<span class="contact">仅供测试，请勿大金额付款</span>
+			</div>
+		</div>
+	</div>
+	
+	<!--支付方式-->
+	<div class="w1080 PayMethod12" style="border-radius: 1em;">
+		<div class="row">
+			<ul>
+				<label >
+					<a href="/demo"><li class="pay_li">
+						<span>创建支付订单</span>
+					</li></a>
+				</label>
+				<label >
+					<a href="/query"><li class="pay_li">
+						<span>支付结果查询</span>
+					</li></a>
+				</label>
+				<label >
+					<a href="javascript:dev();"><li class="pay_li">
+						<span>银行卡签约</span>
+					</li></a>
+				</label>
+				
+			</ul>
+		</div>
+	</div>
+	<div class="mt_agree">
+		<div class="mt_agree_main">
+			<h2>提示信息</h2>
+			<p id="errorContent" style="text-align: center; line-height: 36px;"></p>
+			<a class="close_btn" onclick="message_hide()">确定</a>
+		</div>
+	</div>
+	<!--底部-->
+	<div class="w1080 footer12">
+		<p>Copyright © 2020-2021 依然聚合支付 版权所有</p>
+	</div>
+	<script type="text/javascript">
+		function message_show(message) {
+			$("#errorContent").html(message);
+			$('.mt_agree').fadeIn(300);
+		}
+
+		function message_hide() {
+			$('.mt_agree').fadeOut(300);
+		}
+	</script>
+	<script type="text/javascript">
+		function dev(){
+			message_show("功能还在开发中...");
+			return false;
+		}
+	</script>
+</body>
+</html>

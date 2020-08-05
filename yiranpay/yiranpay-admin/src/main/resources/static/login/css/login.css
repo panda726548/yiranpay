@@ -1,0 +1,4 @@
+.dis{display:none;}
+.login-action a{display:inline-block;width:50%;}
+.login-action a:last-child{text-align:right;}
+.loginbox input.form-control{padding-left:3px;}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <!-- 上下文名称 -->
+    <contextName>channel-pay</contextName>
+
+    <!-- 定义字符集属性 -->
+    <property name="CHARSET" value="UTF-8"/>
+    <!-- 定义文件路径属性（使用spring boot已经定义的环境变量） -->
+    <property name="FILE_PATH" value="/opt/logs/wx_channelpay"/>
+    <!-- 定义控制台日志格式属性 -->
+    <property name="CONSOLE_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%clr(%-5p)] [%clr(%logger{15}){cyan}]: %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- 彩色日志渲染引擎 -->
+    <conversionRule conversionWord="clr"
+                    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <!-- 设置第三方包日志级别 -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache.commons" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="cn.hutool" level="WARN"/>
+    <logger name="org.beetl" level="WARN"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>

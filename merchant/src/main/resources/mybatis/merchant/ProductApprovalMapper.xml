@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.merchant.product.mapper.ProductApprovalMapper">
+    
+    <resultMap type="ProductApproval" id="ProductApprovalResult">
+        <result property="id"    column="id"    />
+        <result property="memberNo"    column="member_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="productName"    column="product_name"    />
+        <result property="reason"    column="reason"    />
+        <result property="processstatus"    column="processStatus"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProductApprovalVo">
+        select id, member_no, product_code, product_name, reason, processStatus, create_by, create_time, update_by, update_time, remark from gateway_product_approval
+    </sql>
+
+    <select id="selectProductApprova"  resultMap="ProductApprovalResult">
+        <include refid="selectProductApprovalVo"/>
+		where product_code = #{productCode}
+			and member_no = #{memberNo}
+    </select>
+    
+        
+    <insert id="insertProductApproval" parameterType="ProductApproval" useGeneratedKeys="true" keyProperty="id">
+        insert into gateway_product_approval
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberNo != null  and memberNo != ''">member_no,</if>
+            <if test="productCode != null  and productCode != ''">product_code,</if>
+            <if test="productName != null  and productName != ''">product_name,</if>
+            <if test="reason != null  and reason != ''">reason,</if>
+            <if test="processstatus != null ">processStatus,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberNo != null  and memberNo != ''">#{memberNo},</if>
+            <if test="productCode != null  and productCode != ''">#{productCode},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="processstatus != null ">#{processstatus},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+    
+</mapper>

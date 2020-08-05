@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiranpay.message.mapper.MsgSendRecordMapper">
+    
+    <resultMap type="MsgSendRecord" id="MsgSendRecordResult">
+        <result property="sendRecordId"    column="send_record_id"    />
+        <result property="msgOrderNo"    column="msg_order_no"    />
+        <result property="sendRecordVerifyCode"    column="send_record_verify_code"    />
+        <result property="sendRecordBusinessType"    column="send_record_business_type"    />
+        <result property="sendRecordPhone"    column="send_record_phone"    />
+        <result property="sendRecordTemplateCode"    column="send_record_template_code"    />
+        <result property="sendRecordTemplateContent"    column="send_record_template_content"    />
+        <result property="sendRecordTime"    column="send_record_time"    />
+        <result property="sendRecordStatus"    column="send_record_status"    />
+        <result property="sendRecordSmsId"    column="send_record_sms_id"    />
+        <result property="sendRecordCode"    column="send_record_code"    />
+        <result property="sendRecordMsg"    column="send_record_msg"    />
+        <result property="sendRecordDelFlag"    column="send_record_del_flag"    />
+        <result property="sendRecordResponseTime"    column="send_record_response_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMsgSendRecordVo">
+        select send_record_id, msg_order_no, send_record_verify_code, send_record_business_type, send_record_phone, send_record_template_code, send_record_template_content, send_record_time, send_record_status, send_record_sms_id, send_record_code, send_record_msg, send_record_del_flag, send_record_response_time, remark, create_by, create_time, update_by, update_time from msg_send_record
+    </sql>
+
+    <select id="selectMsgSendRecordList" parameterType="MsgSendRecord" resultMap="MsgSendRecordResult">
+        <include refid="selectMsgSendRecordVo"/>
+        <where>  
+            <if test="msgOrderNo != null  and msgOrderNo != ''"> and msg_order_no = #{msgOrderNo}</if>
+            <if test="sendRecordVerifyCode != null  and sendRecordVerifyCode != ''"> and send_record_verify_code = #{sendRecordVerifyCode}</if>
+            <if test="sendRecordBusinessType != null  and sendRecordBusinessType != ''"> and send_record_business_type = #{sendRecordBusinessType}</if>
+            <if test="sendRecordPhone != null  and sendRecordPhone != ''"> and send_record_phone = #{sendRecordPhone}</if>
+            <if test="sendRecordTemplateCode != null  and sendRecordTemplateCode != ''"> and send_record_template_code = #{sendRecordTemplateCode}</if>
+            <if test="sendRecordTemplateContent != null  and sendRecordTemplateContent != ''"> and send_record_template_content = #{sendRecordTemplateContent}</if>
+            <if test="sendRecordTime != null "> and send_record_time = #{sendRecordTime}</if>
+            <if test="sendRecordStatus != null  and sendRecordStatus != ''"> and send_record_status = #{sendRecordStatus}</if>
+            <if test="sendRecordSmsId != null  and sendRecordSmsId != ''"> and send_record_sms_id = #{sendRecordSmsId}</if>
+            <if test="sendRecordCode != null  and sendRecordCode != ''"> and send_record_code = #{sendRecordCode}</if>
+            <if test="sendRecordMsg != null  and sendRecordMsg != ''"> and send_record_msg = #{sendRecordMsg}</if>
+            <if test="sendRecordDelFlag != null  and sendRecordDelFlag != ''"> and send_record_del_flag = #{sendRecordDelFlag}</if>
+            <if test="sendRecordResponseTime != null "> and send_record_response_time = #{sendRecordResponseTime}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+        </where>
+        order by send_record_id desc
+    </select>
+    
+    <select id="selectMsgSendRecordById" parameterType="Long" resultMap="MsgSendRecordResult">
+        <include refid="selectMsgSendRecordVo"/>
+        where send_record_id = #{sendRecordId}
+    </select>
+
+    <select id="getSendSmSCount" parameterType="MsgSendRecord" resultType="int">
+    	select count(1) from msg_send_record r
+    		where date_format(r.send_record_time,'%Y-%m-%d') = date_format(#{sendRecordTime},'%Y-%m-%d')
+    			and r.send_record_phone = #{sendRecordPhone}
+    			and r.send_record_status = 'S'
+    </select>
+        
+    <insert id="insertMsgSendRecord" parameterType="MsgSendRecord" useGeneratedKeys="true" keyProperty="sendRecordId">
+        insert into msg_send_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgOrderNo != null  and msgOrderNo != ''">msg_order_no,</if>
+            <if test="sendRecordVerifyCode != null  and sendRecordVerifyCode != ''">send_record_verify_code,</if>
+            <if test="sendRecordBusinessType != null  and sendRecordBusinessType != ''">send_record_business_type,</if>
+            <if test="sendRecordPhone != null  and sendRecordPhone != ''">send_record_phone,</if>
+            <if test="sendRecordTemplateCode != null  and sendRecordTemplateCode != ''">send_record_template_code,</if>
+            <if test="sendRecordTemplateContent != null  and sendRecordTemplateContent != ''">send_record_template_content,</if>
+            <if test="sendRecordTime != null ">send_record_time,</if>
+            <if test="sendRecordStatus != null  and sendRecordStatus != ''">send_record_status,</if>
+            <if test="sendRecordSmsId != null  and sendRecordSmsId != ''">send_record_sms_id,</if>
+            <if test="sendRecordCode != null  and sendRecordCode != ''">send_record_code,</if>
+            <if test="sendRecordMsg != null  and sendRecordMsg != ''">send_record_msg,</if>
+            <if test="sendRecordDelFlag != null  and sendRecordDelFlag != ''">send_record_del_flag,</if>
+            <if test="sendRecordResponseTime != null ">send_record_response_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgOrderNo != null  and msgOrderNo != ''">#{msgOrderNo},</if>
+            <if test="sendRecordVerifyCode != null  and sendRecordVerifyCode != ''">#{sendRecordVerifyCode},</if>
+            <if test="sendRecordBusinessType != null  and sendRecordBusinessType != ''">#{sendRecordBusinessType},</if>
+            <if test="sendRecordPhone != null  and sendRecordPhone != ''">#{sendRecordPhone},</if>
+            <if test="sendRecordTemplateCode != null  and sendRecordTemplateCode != ''">#{sendRecordTemplateCode},</if>
+            <if test="sendRecordTemplateContent != null  and sendRecordTemplateContent != ''">#{sendRecordTemplateContent},</if>
+            <if test="sendRecordTime != null ">#{sendRecordTime},</if>
+            <if test="sendRecordStatus != null  and sendRecordStatus != ''">#{sendRecordStatus},</if>
+            <if test="sendRecordSmsId != null  and sendRecordSmsId != ''">#{sendRecordSmsId},</if>
+            <if test="sendRecordCode != null  and sendRecordCode != ''">#{sendRecordCode},</if>
+            <if test="sendRecordMsg != null  and sendRecordMsg != ''">#{sendRecordMsg},</if>
+            <if test="sendRecordDelFlag != null  and sendRecordDelFlag != ''">#{sendRecordDelFlag},</if>
+            <if test="sendRecordResponseTime != null ">#{sendRecordResponseTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMsgSendRecord" parameterType="MsgSendRecord">
+        update msg_send_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="msgOrderNo != null  and msgOrderNo != ''">msg_order_no = #{msgOrderNo},</if>
+            <if test="sendRecordVerifyCode != null  and sendRecordVerifyCode != ''">send_record_verify_code = #{sendRecordVerifyCode},</if>
+            <if test="sendRecordBusinessType != null  and sendRecordBusinessType != ''">send_record_business_type = #{sendRecordBusinessType},</if>
+            <if test="sendRecordPhone != null  and sendRecordPhone != ''">send_record_phone = #{sendRecordPhone},</if>
+            <if test="sendRecordTemplateCode != null  and sendRecordTemplateCode != ''">send_record_template_code = #{sendRecordTemplateCode},</if>
+            <if test="sendRecordTemplateContent != null  and sendRecordTemplateContent != ''">send_record_template_content = #{sendRecordTemplateContent},</if>
+            <if test="sendRecordTime != null ">send_record_time = #{sendRecordTime},</if>
+            <if test="sendRecordStatus != null  and sendRecordStatus != ''">send_record_status = #{sendRecordStatus},</if>
+            <if test="sendRecordSmsId != null  and sendRecordSmsId != ''">send_record_sms_id = #{sendRecordSmsId},</if>
+            <if test="sendRecordCode != null  and sendRecordCode != ''">send_record_code = #{sendRecordCode},</if>
+            <if test="sendRecordMsg != null  and sendRecordMsg != ''">send_record_msg = #{sendRecordMsg},</if>
+            <if test="sendRecordDelFlag != null  and sendRecordDelFlag != ''">send_record_del_flag = #{sendRecordDelFlag},</if>
+            <if test="sendRecordResponseTime != null ">send_record_response_time = #{sendRecordResponseTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where send_record_id = #{sendRecordId}
+    </update>
+
+    <delete id="deleteMsgSendRecordById" parameterType="Long">
+        delete from msg_send_record where send_record_id = #{sendRecordId}
+    </delete>
+
+    <delete id="deleteMsgSendRecordByIds" parameterType="String">
+        delete from msg_send_record where send_record_id in 
+        <foreach item="sendRecordId" collection="array" open="(" separator="," close=")">
+            #{sendRecordId}
+        </foreach>
+    </delete>
+    
+</mapper>

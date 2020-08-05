@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('修改')" />
+	<th:block th:include="include :: summernote-css" />
+	<th:block th:include="include :: datetimepicker-css" />
+</head>
+
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-topic-edit" th:object="${topic}">
+        	<input id="id" name="id" type="hidden" th:field="*{id}"/>
+
+        	<input id="treeId" name="cid" type="hidden" th:field="*{cid}"/>
+        	<div class="form-group">	
+				<label class="col-sm-3 control-label">文章标题：</label>
+				<div class="col-sm-8">
+					<input id="title" name="title" class="form-control" type="text" th:field="*{title}">
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">文章栏目：</label>
+				<div class="col-sm-8">
+					<input id="treeName" name="cname" class="form-control" onclick="selectChnanelTree()" readonly="readonly" type="text" th:field="*{cname}">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label">文章状态:</label>
+				<div class="col-sm-8">
+					<div class="radio-box" th:each="dict : ${@dict.getType('system_content_topic_status')}">
+						<input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.default}" th:field="*{status}">
+						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+					</div>
+
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否推荐:</label>
+				<div class="col-sm-8">
+					<div class="radio-box" th:each="dict : ${@dict.getType('system_content_topic_recommend')}">
+						<input type="radio" th:id="${dict.dictCode}" name="recommend" th:value="${dict.dictValue}" th:checked="${dict.default}" th:field="*{recommend}">
+						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+					</div>
+
+
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">文章发布时间：</label>
+				<div class="col-sm-8">
+					<div class="publishDate">
+						<input type="text" class="form-control" id="publishDate" placeholder="yyyy-MM-dd HH:mm:ss" name="publishDate" th:value="${#dates.format(topic.publishDate,'yyyy-MM-dd HH:mm:ss')}" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">文章关键字:</label>
+				<div class="col-sm-8">
+					<input id="keyword" name="keyword" class="form-control" type="text" th:field="*{keyword}">
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">文章的摘要：</label>
+				<div class="col-sm-8">
+					<input id="summary" name="summary" class="form-control" type="text" th:field="*{summary}" >
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">文章的内容：</label>
+				<div class="col-sm-8">
+					<input type="hidden"  id="topicContent" name="topicContent" th:field="*{topicContent}"/>
+					<div id="editor" class="summernote"></div>
+				</div>
+			</div>
+			<!--
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+			-->
+
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+	<th:block th:include="include :: summernote-js" />
+	<th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+	    function CKupdate(){
+			for (instance in CKEDITOR.instances){
+	    		CKEDITOR.instances[instance].updateElement();       
+	    	}  
+		}
+
+		$(function() {
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+				laydate.render({
+					elem: '#publishDate',
+					type: 'datetime'
+				});
+			})
+
+			$('.summernote').summernote({
+				placeholder: '请输入公告内容',
+				height : 192,
+				lang : 'zh-CN',
+				followingToolbar: false,
+				callbacks: {
+					onImageUpload: function (files) {
+						sendFile(files[0], this);
+					}
+				}
+			});
+			var content = $("#topicContent").val();
+			$('#editor').summernote('code', content);
+		});
+
+		// 上传文件
+		function sendFile(file, obj) {
+			var data = new FormData();
+			data.append("file", file);
+			$.ajax({
+				type: "POST",
+				url: ctx + "common/upload",
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				dataType: 'json',
+				success: function(result) {
+					if (result.code == web_status.SUCCESS) {
+						$(obj).summernote('editor.insertImage', result.url, result.fileName);
+					} else {
+						$.modal.alertError(result.msg);
+					}
+				},
+				error: function(error) {
+					$.modal.alertWarning("图片上传失败。");
+				}
+			});
+		}
+
+		var prefix = ctx + "system/content/topic";
+		// $("#form-topic-edit").validate({
+		// 	rules:{
+		// 		xxxx:{
+		// 			required:true,
+		// 		},
+		// 	},
+		// 	submitHandler: function(form) {
+		// 		CKupdate();
+		// 		$.operate.save(prefix + "/save", $('#form-topic-edit').serialize());
+		// 	}
+		// });
+		function submitHandler() {
+			if ($.validate.form()) {
+				var sHTML = $('.summernote').summernote('code');
+				$("#topicContent").val(sHTML);
+				$.operate.save(prefix + "/save", $('#form-topic-edit').serialize());
+			}
+		}
+		/*栏目管理-新增-选择父部门树*/
+		function selectChnanelTree() {
+			var treeId = $("#treeId").val();
+			var id = $.common.isEmpty(treeId) ? "1" : $("#treeId").val();
+			var url = prefix + "/selectChannelTree/" + id;
+			var options = {
+				title: '选择部门',
+				width: "380",
+				url: url,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+
+		function doSubmit(index, layero){
+			var tree = layero.find("iframe")[0].contentWindow.$._tree;
+			if ($.tree.notAllowParents(tree)) {
+				var body = layer.getChildFrame('body', index);
+				$("#treeId").val(body.find('#treeId').val());
+				$("#treeName").val(body.find('#treeName').val());
+				layer.close(index);
+			}
+		}
+	</script>
+</body>
+</html>

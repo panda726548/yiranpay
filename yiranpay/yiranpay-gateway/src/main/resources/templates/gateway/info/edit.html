@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改产品')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-menu-edit" th:object="${productmenu}">
+			<input name="productId"   type="hidden" th:field="*{productId}"   />
+			<input id="treeId" name="parentId" type="hidden" th:field="*{parentId}" />
+			<div class="form-group">
+				<label class="col-sm-3 control-label">上级菜单：</label>
+				<div class="col-sm-8">
+				    <div class="input-group">
+						<input class="form-control" type="text" onclick="selectProductTree()" id="treeName" readonly="true" th:value="${productmenu.parentName == null ? '无' : productmenu.parentName}">
+					    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+				    </div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label is-required">菜单类型：</label>
+				<div class="col-sm-8">
+					<label class="radio-box"> <input type="radio" th:field="*{parentMenuType}" name="parentMenuType" value="M" /> 目录 </label> 
+					<label class="radio-box"> <input type="radio" th:field="*{parentMenuType}" name="parentMenuType" value="C" /> 菜单 </label> 
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label is-required">产品编码：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="productCode" id="productCode" th:field="*{productCode}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label is-required">产品名称：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="productName" id="productName" th:field="*{productName}" required>
+				</div>
+			</div>
+            <div class="form-group">
+				<label class="col-sm-3 control-label">产品状态：</label>
+				<div class="col-sm-8">
+					<div class="radio-box" th:each="dict : ${@dict.getType('api_inteface_status')}">
+						<input type="radio" th:id="${dict.dictCode}" name="visible" th:value="${dict.dictValue}" th:field="*{status}">
+						<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label is-required">显示排序：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="orderNum" th:field="*{orderNum}" required>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	 <script>
+        var prefix = ctx + "gateway/info";
+
+        $(function() {
+            var parentMenuType = $('input[name="parentMenuType"]:checked').val();
+            menuVisible(parentMenuType);
+        });
+
+        $("#form-menu-edit").validate({
+        	onkeyup: false,
+        	rules:{
+        		menuType:{
+        			required:true,
+        		},
+        		menuName:{
+        			remote: {
+                        url: prefix + "/checkProductNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	"productId": function() {
+                                return $("#productId").val();
+                            },
+                            "parentId": function() {
+		                		return $("input[name='parentId']").val();
+		                    },
+                			"productName": function() {
+                                return $.common.trim($("#productName").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                        	return $.validate.unique(data);
+                        }
+                    }
+        		},
+        		orderNum:{
+        			digits:true
+        		},
+        	},
+        	messages: {
+                "productName": {
+                    remote: "产品名称已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+        
+        function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-menu-edit').serialize());
+	        }
+	    }
+
+        $(function() {
+            
+            $("#form-menu-edit").click(function(event) {
+                var obj = event.srcElement || event.target;
+            });
+            $('input').on('ifChecked',
+            function(event) {
+                var menuType = $(event.target).val();
+                menuVisible(menuType);
+            });
+        });
+
+        function menuVisible(menuType) {
+            if (menuType == "M") {
+                $("#productCode").parents(".form-group").hide();
+                $("input[name='status']").parents(".form-group").show();
+            } else if (menuType == "C") {
+                $("#productCode").parents(".form-group").show();
+                $("input[name='status']").parents(".form-group").show();
+            }
+        }
+
+        function selectProductTree() {
+        	var parentId = $("#treeId").val();
+        	if(parentId > 0) {
+        		var url = prefix + "/selectProductTree/" + parentId;
+        		$.modal.open("选择菜单", url, '380', '380');
+        	} else {
+        		$.modal.alertError("主菜单不能选择");
+        	}
+        }
+        
+        function selectProductTree() {
+        	var parentId = $("#treeId").val();
+        	if(parentId > 0) {
+        		var url = prefix + "/selectProductTree/" + parentId;
+        		var options = {
+       				title: '接口菜单选择',
+       				width: "380",
+       				url: url,
+       				callBack: doSubmit
+       			};
+       			$.modal.openOptions(options);
+        	} else {
+        		$.modal.alertError("接口主菜单不能选择");
+        	}
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+    </script>
+</body>
+</html>

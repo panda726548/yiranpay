@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('文章')" />
+</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>文章预览</title>
+
+<body>
+
+	<div class="row wrapper border-bottom white-bg page-heading">
+		<div class="col-lg-10">
+			<br>
+			<ol class="breadcrumb">
+				<li><a href="index.html">主页</a></li>
+				<li><a>应用</a></li>
+				<li class="active"><strong>文章</strong></li>
+			</ol>
+		</div>
+		<div class="col-lg-2"></div>
+	</div>
+
+	<div class="wrapper wrapper-content  animated fadeInRight article">
+		<div class="row">
+			<div class="col-lg-10 col-lg-offset-1">
+				<div class="ibox">
+					<div class="ibox-content">
+						<div class="text-center article-title">
+							<h2 th:utext="${topic.title}"></h2>
+						</div>
+						<div class="pull-right">
+							作者:&nbsp;<span th:utext="${topic.author}"></span>&nbsp;&nbsp;
+							<span class="text-muted"><i class="fa fa-clock-o"></i><span th:utext="${#dates.format(topic.publishDate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
+						</div>
+						<br>
+						<hr>
+						<div th:utext="${topic.topicContent}"></div>
+						<hr>
+						<div class="row">
+							<div class="col-md-6">
+								<h5>标签:</h5>
+								<button class="btn btn-primary btn-xs" type="button" th:utext="${topic.keyword}"></button>
+							</div>
+							<div class="col-md-6">
+								<div class="small text-right">
+									<!--
+									 <h5>统计:</h5>
+									<i class="fa fa-eye"> </i> <span th:utext="${topic.browseNumber}">144 </span>查看
+									 -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+
+</body>
+
+</html>

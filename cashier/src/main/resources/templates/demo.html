@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+	name="viewport">
+<title>PC端支付 DEMO测试页</title>
+<link href="css/Reset.css" rel="stylesheet" type="text/css">
+<link href="css/main12.css" rel="stylesheet" type="text/css">
+<link href="css/yr-ui.css" rel="stylesheet" type="text/css">
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/cashier.js"></script>
+<script src="ajax/libs/blockUI/jquery.blockUI.js"></script>
+
+<style>
+.pay_li input {
+	display: none;
+}
+
+.immediate_pay {
+	border: none;
+}
+
+.PayMethod12 {
+	min-height: 150px;
+}
+
+@media screen and (max-width: 700px) {
+	.PayMethod12 {
+		padding-top: 0;
+	}
+	.order-amount12 {
+		margin-bottom: 0;
+	}
+	.order-amount12, .PayMethod12 {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.order-amount12-right input {
+	border: 1px solid #efefef;
+	width: 6em;
+	padding: 5px 20px;
+	font-size: 15px;
+	text-indent: 0.5em;
+	line-height: 1.8em;
+}
+
+.si_PayMethod12 {
+	width: 1010px;
+	padding: 35px 35px;
+	background: #fff;
+	margin-top: 36px;
+}
+
+.si_PayMethod12 h2 {
+	font-size: 16px;
+	height: 30px;
+	line-height: 30px;
+	/*margin-bottom: 10px;*/
+}
+
+.si_PayMethod12 ul {
+	overflow: hidden;
+}
+
+.si_PayMethod12 ul li {
+	padding: 20px 0 0 30px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.si_PayMethod12 ul li .iw {
+	display: inline-block;
+	vertical-align: middle;
+	width: 114px;
+	height: 25px;
+	padding-top: 5px;
+	padding-left: 10px;
+	background: url(bank_logo.png) no-repeat;
+	border: #DDD solid 1px;
+	text-indent: -9999px;
+}
+	img{max-width: 100%; height: auto;}
+	.weixin-tip{display: none; position: fixed; left:0; top:0; bottom:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80);  height: 100%; width: 100%; z-index: 100;}
+	.weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;}
+</style>
+<script>
+		var lastClickTime;
+        var OrderRequest = function OrderRequest(produceName,orderId,amount,payMode){
+			this.produceName = produceName;
+			this.orderId = orderId;
+			this.amount = amount;
+			this.payMode = payMode;
+		}
+        $(function () {
+            
+        	$('.PayMethod12 ul li').each(function (index, element) {
+                $('.PayMethod12 ul li').eq(5 * index + 4).css('margin-right', '0')
+            });
+
+            //支付方式选择
+            $('.PayMethod12 ul li').click(function (e) {
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+
+            $(".pay_li").click(function () {
+                $(".pay_li").removeClass("active");
+                $(this).addClass("active");
+            });
+            //点击立即支付按钮
+            $(".immediate_pay").click(function () {
+                //判断用户是否选择了支付渠道
+                if (!$(".pay_li").hasClass("active")) {
+                    message_show("请选择支付方式");
+                    return false;
+                }
+                
+                //获取商品名称
+                var produceName = $("#produceName").html();
+                var orderId = $("#orderId").html();
+                var amount =$("#need_amount").html();
+                //获取渠道
+                var payMode = $('.active input').val();
+               	var winHeight = $(window).height();
+       			var isWeixin = is_weixin();
+       			if((isWeixin && "ALIPAY"==payMode) || (isWeixin && "UPOP"==payMode) 
+       					|| (isWeixin && "ALI_WAP_PAY"==payMode)
+       					|| (isWeixin && "ALI_PAGE_PAY"==payMode)
+       					|| (isWeixin && "ALI_APP_PAY"==payMode)){
+       				$(".weixin-tip").css("height",winHeight);
+       	            $(".weixin-tip").show();
+       	            return false;
+       			}
+                loading("支付中....");
+                var order = new  OrderRequest(produceName,orderId,amount,payMode);
+                var jsondata = JSON.stringify(order);
+                $.ajax({
+            		type: "post",
+            		url: "/createOrder",
+            		data: jsondata,
+            		async: false, //同步
+					//参数格式为json
+					contentType: "application/json; charset=utf-8",
+            		success: function (data) {
+            			closeLoading(); 
+            			if("WX_NATIVE_PAY" == payMode){
+            				console.info(data.data);
+            				localStorage.setItem('codeUrl',data.data);
+                			window.location.href ="qr.html?id="+10000*Math.random() ;
+            			}else{
+            				localStorage.setItem('htmlForm',data.data);
+                			window.location.href ="order.html?id="+10000*Math.random() ;
+            			}
+            		},
+            		//调用出错执行的函数
+                    error: function(){
+                    	closeLoading();
+                    	message_show("支付失败!");
+                    }
+            	});
+
+            });
+
+            
+
+            $('.mt_agree').click(function (e) {
+                $('.mt_agree').fadeOut(300);
+            });
+
+            $('.mt_agree_main').click(function (e) {
+                return false;
+            });
+
+            //弹窗
+			$('.pay_sure12').click(function(e) {
+				$(this).fadeOut();
+			}); 
+
+            $('.pay_sure12-main').click(function (e) {
+                e. stopPropagation();
+                return false;
+            });
+            
+        });
+        
+        function on_blur(){
+        	var amount =$("#amount").val();
+        	$("#need_amount").html(amount);
+        }
+        
+        function is_weixin() {
+		    var ua = navigator.userAgent.toLowerCase();
+		    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+		        return true;
+		    } else {
+		        return false;
+		    }
+		}
+        
+</script>
+
+
+</head>
+<body style="background-color: #f9f9f9">
+	<div class="weixin-tip">
+		<p>
+			<img src="images/live_weixin.png" alt="微信打开"/>
+		</p>
+	</div>
+	<!--导航-->
+	<div class="w100 navBD12">
+		<div class="w1080 nav12">
+			<div class="nav12-left">
+				<span class="contact">YiRanPay聚合支付 体验收银台</span>
+			</div>
+			<div class="nav12-right">
+				<span class="contact">仅供测试，请勿大金额付款</span>
+			</div>
+		</div>
+	</div>
+	<!--订单金额-->
+	<div class="w1080 order-amount12" style="border-radius: 1em;">
+		<ul class="order-amount12-left">
+			<li><span>商品名称：</span> <span id="produceName">demo test</span></li>
+			<li><span>订单编号：</span> <span id="orderId" th:text="${orderId}"></span></li>
+		</ul>
+		<div class="order-amount12-right">
+			<span>订单金额：</span> <strong><input id="amount" type="text" name="amount"
+				value="0.01" onBlur="on_blur();" onFocus=" " ></strong> <span>元</span>
+		</div>
+	</div>
+	<!--支付方式-->
+	<div class="w1080 PayMethod12" style="border-radius: 1em;">
+		<div class="row">
+			<h2>银联支付</h2>
+			<ul>
+				<label for="zfb">
+					<li class="pay_li" ><input value="ALIPAY"
+							name="channel" id="zfb" type="radio"> <i
+							class="i1"></i> <span>银联支付宝</span>
+					</li>
+				</label>
+				
+				<label for="china_wx">
+					<li class="pay_li" ><input value="WXPAY" name="channel"
+						id="china_wx" type="radio"> <i class="i2"></i> <span>银联微信支付</span>
+					</li>
+				</label>
+				
+				<label for="yl">
+					<li class="pay_li" ><input value="UPOP" name="channel"
+						id="yl" type="radio"> <i class="i3"></i> <span>银联卡支付</span>
+					</li>
+				</label>
+				
+			</ul>
+		</div>
+	</div>
+	<div class="w1080 PayMethod12" style="border-radius: 1em;">
+		<div class="row">
+			<h2>支付宝支付</h2>
+			<ul>
+				
+				<label for="zfb_wap">
+					<li class="pay_li" ><input value="ALI_WAP_PAY"
+							name="channel" id="zfb_wap" type="radio"> <i
+							class="i1"></i> <span>支付宝WAP支付</span>
+					</li>
+				</label>
+				<label for="zfb_page">
+					<li class="pay_li" ><input value="ALI_PAGE_PAY"
+							name="channel" id="zfb_page" type="radio"> <i
+							class="i1"></i> <span>支付宝PC端支付</span>
+					</li>
+				</label>
+				<label for="zfb_app">
+					<li class="pay_li" ><input value="ALI_APP_PAY"
+							name="channel" id="zfb_app" type="radio"> <i
+							class="i1"></i> <span>支付宝APP支付</span>
+					</li>
+				</label>
+				
+			</ul>
+		</div>
+	</div>
+	<div class="w1080 PayMethod12" style="border-radius: 1em;">
+		<div class="row">
+			<h2>微信支付</h2>
+			<ul>
+				<label for="wx_native">
+					<li class="pay_li" ><input value="WX_NATIVE_PAY" name="channel"
+						id="wx_native" type="radio"> <i class="i2"></i> <span>原生微信支付</span>
+
+					</li>
+				</label>
+			</ul>
+		</div>
+	</div>
+	<!--立即支付-->
+
+	<div class="w1080 immediate-pay12"
+		style="border-radius: 1em; padding-top: 1em; padding-bottom: 1em; padding-right: 1em;">
+		<div class="immediate-pay12-right">
+			<span>需支付：<strong id="need_amount">0.01</strong>元
+			</span>
+
+			<button type="button" class="immediate_pay">立即支付</button>
+		</div>
+	</div>
+	<div class="mt_agree">
+		<div class="mt_agree_main">
+			<h2>提示信息</h2>
+			<p id="errorContent" style="text-align: center; line-height: 36px;"></p>
+			<a class="close_btn" onclick="message_hide()">确定</a>
+		</div>
+	</div>
+	<!--底部-->
+	<div class="w1080 footer12">
+		<p>Copyright © 2020-2021 依然聚合支付 版权所有</p>
+	</div>
+
+
+	<script type="text/javascript">
+		function message_show(message) {
+			$("#errorContent").html(message);
+			$('.mt_agree').fadeIn(300);
+		}
+
+		function message_hide() {
+			$('.mt_agree').fadeOut(300);
+		}
+	</script>
+	<script type="text/javascript">
+		function message_show(message) {
+			$("#errorContent").html(message);
+			$('.mt_agree').fadeIn(300);
+		}
+
+		function message_hide() {
+			$('.mt_agree').fadeOut(300);
+		}
+
+		//银行显示 赋默认值   表示选中网银支付
+		$("#wz").click(function() {
+			$("#select").val('select');
+			$(".w1080").show();
+		});
+		//其他的支付方式  隐藏银行编号以及赋的默认值清空
+		$("#kj").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#zfb").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#ylsm").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#yl").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#wx").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#zfbh5").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		$("#wxh5").click(function() {
+			$("#select").val('');
+			$(".si_PayMethod12").hide();
+		});
+		
+	</script>
+
+</body>
+</html>

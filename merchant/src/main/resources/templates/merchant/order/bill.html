@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>账单下载</title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+
+    <link th:href="@{/ajax/libs/fullcalendar/fullcalendar.css}" rel="stylesheet">
+    <link th:href="@{/ajax/libs/fullcalendar/fullcalendar.print.css}" rel='stylesheet' media='print'>
+
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="wrapper wrapper-content">
+    <div class="row animated fadeInDown">
+        <div class="col-lg-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Mainly scripts -->
+<script th:src="@{/ajax/libs/fullcalendar/moment.min.js}"></script>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Full Calendar -->
+<script th:src="@{/ajax/libs/fullcalendar/fullcalendar.min.js}"></script>
+
+<script th:inline="javascript">
+	var ctx = [[@{/}]];
+	var prefix = ctx + "merchant/order";
+    $(document).ready(function() {
+    	
+        /* initialize the calendar
+         -----------------------------------------------------------------*/
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next',
+                center: 'title',
+                right: ''
+            },
+            editable: true,
+            droppable: true, // this allows things to be dropped onto the calenda
+            isRTL:false,
+            weekMode:'fixed',//在月视图里显示周的模式，因为每月周数可能不同，所以月视图高度不一定。fixed：固定显示6周高，日历高度保持不变liquid：不固定周数，高度随周数变化variable：不固定周数，但高度固定
+            weekNumbers:false,//是否在日历中显示周次(一年中的第几周)，如果设置为true，则会在月视图的左侧、周视图和日视图的左上角显示周数。
+            height:420,//设置日历的高度，包括header日历头部，默认未设置，高度根据aspectRatio值自适应。
+            aspectRatio:1.35,//设置日历单元格宽度与高度的比例。
+            handleWindowResize:true,//是否随浏览器窗口大小变化而自动变化。
+            monthNames : ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], //月份自定义命名
+            monthNamesShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], //月份缩略命名（英语比较实用：全称January可设置缩略为Jan）
+            dayNames: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],       //同理monthNames
+            dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],  //同理monthNamesShort
+            weekNumberTitle : "周",         //周的国际化,默认为"W"
+            eventClick: function(calEvent, jsEvent, view) {//日程区块，单击时触发
+              console.log(jsEvent.target)
+              
+              console.log("↓↓↓eventClick↓↓↓");
+              console.log('Event: ' + calEvent.title);
+              console.log('Event_id: ' + calEvent.id);
+              console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+              console.log('Current view: ' + view.name);
+              if("对账文件下载" == calEvent.title){
+            	  $.ajax({
+                    	url: prefix + '/dowmload',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                        	id: calEvent.id,
+                        },
+                        success: function(result) { 
+                        	window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                        }
+            		});
+              }
+            }, 
+            events: function(start,end,timezone, callback) {
+            	var date = this.getDate().format('YYYY-MM-DD');
+                $.ajax({
+                	url: prefix + '/getData',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                    	start: date,
+                    },
+                    success: function(json) { // 获取当前月的数据
+                        var events = [];
+                        var jsonObj = $.parseJSON(json.data);
+                        $.each(jsonObj,function(i,c) {
+                        	if("无对账文件" == c.title){
+                        		events.push({
+                        			id: c.id,
+                                    title: c.title,
+                                    start: c.start , 
+                                    url: ""
+                                });
+                        	}else{
+                        		events.push({
+                        			id: c.id,
+                                    title: c.title,
+                                    start: c.start , 
+                                    url: ""
+                                });
+                        	}
+                        });
+                        callback(events);
+                    }
+        		});
+            }
+        });
+    });
+
+</script>
+</body>
+
+</html>

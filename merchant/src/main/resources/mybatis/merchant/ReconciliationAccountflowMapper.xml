@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.merchant.order.mapper.ReconciliationAccountflowMapper">
+    
+    <resultMap type="ReconciliationAccountflow" id="ReconciliationAccountflowResult">
+        <result property="glideId"    column="glide_id"    />
+        <result property="paymentSeqNo"    column="payment_seq_no"    />
+        <result property="clearingOrderId"    column="clearing_order_id"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="paymentCode"    column="payment_code"    />
+        <result property="fundsChannel"    column="funds_channel"    />
+        <result property="amount"    column="amount"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="bizNo"    column="biz_no"    />
+        <result property="isWriteoff"    column="is_writeoff"    />
+        <result property="compareFlag"    column="compare_flag"    />
+        <result property="compareDate"    column="compare_date"    />
+        <result property="compareBatchNo"    column="compare_batch_no"    />
+        <result property="operator"    column="operator"    />
+        <result property="gmtCreate"    column="gmt_create"    />
+        <result property="gmtModified"    column="gmt_modified"    />
+        <result property="memo"    column="memo"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bizType"    column="biz_type"    />
+        <result property="voucherNo"    column="voucher_no"    />
+        <result property="hisFlag"    column="his_flag"    />
+        <result property="memberId"    column="member_id"    />
+    </resultMap>
+
+    <sql id="selectReconciliationAccountflowVo">
+        select glide_id, payment_seq_no, clearing_order_id, product_code, payment_code, funds_channel, amount, account_date, biz_no, is_writeoff, compare_flag, compare_date, compare_batch_no, operator, gmt_create, gmt_modified, memo, bank_code, biz_type, voucher_no, his_flag,member_id from reconciliation_accountflow
+    </sql>
+
+    <select id="selectReconciliationAccountflowList" parameterType="ReconciliationAccountflow" resultMap="ReconciliationAccountflowResult">
+        <include refid="selectReconciliationAccountflowVo"/>
+        <where>  
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''"> and payment_seq_no = #{paymentSeqNo}</if>
+            <if test="clearingOrderId != null  and clearingOrderId != ''"> and clearing_order_id = #{clearingOrderId}</if>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="paymentCode != null  and paymentCode != ''"> and payment_code = #{paymentCode}</if>
+            <if test="fundsChannel != null  and fundsChannel != ''"> and funds_channel = #{fundsChannel}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="accountDate != null  and accountDate != ''"> and account_date = #{accountDate}</if>
+            <if test="bizNo != null  and bizNo != ''"> and biz_no = #{bizNo}</if>
+            <if test="isWriteoff != null  and isWriteoff != ''"> and is_writeoff = #{isWriteoff}</if>
+            <if test="compareFlag != null  and compareFlag != ''"> and compare_flag = #{compareFlag}</if>
+            <if test="compareDate != null  and compareDate != ''"> and compare_date = #{compareDate}</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''"> and compare_batch_no = #{compareBatchNo}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="gmtCreate != null "> and gmt_create = #{gmtCreate}</if>
+            <if test="gmtModified != null "> and gmt_modified = #{gmtModified}</if>
+            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="bizType != null  and bizType != ''"> and biz_type = #{bizType}</if>
+            <if test="voucherNo != null  and voucherNo != ''"> and voucher_no = #{voucherNo}</if>
+            <if test="hisFlag != null  and hisFlag != ''"> and his_flag = #{hisFlag}</if>
+        </where>
+        order by gmt_create desc
+    </select>
+    
+    <select id="selectReconciliationAccountflowById" parameterType="Long" resultMap="ReconciliationAccountflowResult">
+        <include refid="selectReconciliationAccountflowVo"/>
+        where glide_id = #{glideId}
+    </select>
+    
+    <select id="selectReconciliationAccountflowByBizNo" parameterType="String" resultMap="ReconciliationAccountflowResult">
+        <include refid="selectReconciliationAccountflowVo"/>
+        where biz_no = #{bizNo}
+    </select>
+    
+    <select id="selectAccountflowLists" resultMap="ReconciliationAccountflowResult">
+        <include refid="selectReconciliationAccountflowVo"/>
+        where  account_date = #{compareDate}
+        	and compare_flag = #{compareFlag}
+        	and member_id = #{memberId}
+        	and funds_channel in 
+        	<foreach collection="fundCodes" item="code" index="index" open="(" close=")" separator=",">
+		        #{code}
+		    </foreach>
+		    
+    </select>
+        
+    <insert id="insertReconciliationAccountflow" parameterType="ReconciliationAccountflow" useGeneratedKeys="true" keyProperty="glideId">
+        insert into reconciliation_accountflow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">payment_seq_no,</if>
+            <if test="clearingOrderId != null  and clearingOrderId != ''">clearing_order_id,</if>
+            <if test="productCode != null  and productCode != ''">product_code,</if>
+            <if test="paymentCode != null  and paymentCode != ''">payment_code,</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">funds_channel,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="accountDate != null  and accountDate != ''">account_date,</if>
+            <if test="bizNo != null  and bizNo != ''">biz_no,</if>
+            <if test="isWriteoff != null  and isWriteoff != ''">is_writeoff,</if>
+            <if test="compareFlag != null  and compareFlag != ''">compare_flag,</if>
+            <if test="compareDate != null  and compareDate != ''">compare_date,</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">compare_batch_no,</if>
+            <if test="operator != null  and operator != ''">operator,</if>
+            <if test="gmtCreate != null ">gmt_create,</if>
+            <if test="gmtModified != null ">gmt_modified,</if>
+            <if test="memo != null  and memo != ''">memo,</if>
+            <if test="bankCode != null  and bankCode != ''">bank_code,</if>
+            <if test="bizType != null  and bizType != ''">biz_type,</if>
+            <if test="voucherNo != null  and voucherNo != ''">voucher_no,</if>
+            <if test="hisFlag != null  and hisFlag != ''">his_flag,</if>
+            <if test="memberId != null  and memberId != ''">member_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">#{paymentSeqNo},</if>
+            <if test="clearingOrderId != null  and clearingOrderId != ''">#{clearingOrderId},</if>
+            <if test="productCode != null  and productCode != ''">#{productCode},</if>
+            <if test="paymentCode != null  and paymentCode != ''">#{paymentCode},</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">#{fundsChannel},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="accountDate != null  and accountDate != ''">#{accountDate},</if>
+            <if test="bizNo != null  and bizNo != ''">#{bizNo},</if>
+            <if test="isWriteoff != null  and isWriteoff != ''">#{isWriteoff},</if>
+            <if test="compareFlag != null  and compareFlag != ''">#{compareFlag},</if>
+            <if test="compareDate != null  and compareDate != ''">#{compareDate},</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">#{compareBatchNo},</if>
+            <if test="operator != null  and operator != ''">#{operator},</if>
+            <if test="gmtCreate != null ">#{gmtCreate},</if>
+            <if test="gmtModified != null ">#{gmtModified},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="bankCode != null  and bankCode != ''">#{bankCode},</if>
+            <if test="bizType != null  and bizType != ''">#{bizType},</if>
+            <if test="voucherNo != null  and voucherNo != ''">#{voucherNo},</if>
+            <if test="hisFlag != null  and hisFlag != ''">#{hisFlag},</if>
+            <if test="memberId != null  and memberId != ''">#{memberId},</if>
+         </trim>
+    </insert>
+    <update id="updateflow" >
+        update reconciliation_accountflow set 
+        	compare_flag = #{compareFlag},
+        	compare_batch_no = #{compareBatchNo},
+        	compare_date = #{compareDate},
+        	gmt_modified = sysdate()
+        where biz_no = #{bizNo}
+    </update>
+
+    <update id="updateReconciliationAccountflow" parameterType="ReconciliationAccountflow">
+        update reconciliation_accountflow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="paymentSeqNo != null  and paymentSeqNo != ''">payment_seq_no = #{paymentSeqNo},</if>
+            <if test="clearingOrderId != null  and clearingOrderId != ''">clearing_order_id = #{clearingOrderId},</if>
+            <if test="productCode != null  and productCode != ''">product_code = #{productCode},</if>
+            <if test="paymentCode != null  and paymentCode != ''">payment_code = #{paymentCode},</if>
+            <if test="fundsChannel != null  and fundsChannel != ''">funds_channel = #{fundsChannel},</if>
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="accountDate != null  and accountDate != ''">account_date = #{accountDate},</if>
+            <if test="bizNo != null  and bizNo != ''">biz_no = #{bizNo},</if>
+            <if test="isWriteoff != null  and isWriteoff != ''">is_writeoff = #{isWriteoff},</if>
+            <if test="compareFlag != null  and compareFlag != ''">compare_flag = #{compareFlag},</if>
+            <if test="compareDate != null  and compareDate != ''">compare_date = #{compareDate},</if>
+            <if test="compareBatchNo != null  and compareBatchNo != ''">compare_batch_no = #{compareBatchNo},</if>
+            <if test="operator != null  and operator != ''">operator = #{operator},</if>
+            <if test="gmtCreate != null ">gmt_create = #{gmtCreate},</if>
+            <if test="gmtModified != null ">gmt_modified = #{gmtModified},</if>
+            <if test="memo != null  and memo != ''">memo = #{memo},</if>
+            <if test="bankCode != null  and bankCode != ''">bank_code = #{bankCode},</if>
+            <if test="bizType != null  and bizType != ''">biz_type = #{bizType},</if>
+            <if test="voucherNo != null  and voucherNo != ''">voucher_no = #{voucherNo},</if>
+            <if test="hisFlag != null  and hisFlag != ''">his_flag = #{hisFlag},</if>
+            <if test="memberId != null  and memberId != ''">member_id = #{memberId},</if>
+        </trim>
+        where glide_id = #{glideId}
+    </update>
+
+    <delete id="deleteReconciliationAccountflowById" parameterType="Long">
+        delete from reconciliation_accountflow where glide_id = #{glideId}
+    </delete>
+
+    <delete id="deleteReconciliationAccountflowByIds" parameterType="String">
+        delete from reconciliation_accountflow where glide_id in 
+        <foreach item="glideId" collection="array" open="(" separator="," close=")">
+            #{glideId}
+        </foreach>
+    </delete>
+    
+</mapper>

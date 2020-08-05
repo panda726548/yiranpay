@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiran.project.merchant.order.mapper.ReconciliationEventMapper">
+    
+    <resultMap type="ReconciliationEvent" id="ReconciliationEventResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="start"    column="start"    />
+        <result property="url"    column="url"    />
+        <result property="channelcodes"    column="channelCodes"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectReconciliationEventVo">
+        select id, title, start, url, channelCodes, member_id,create_by, create_time, update_by, update_time, remark from reconciliation_event
+    </sql>
+
+    <select id="selectReconciliationEventList" parameterType="ReconciliationEvent" resultMap="ReconciliationEventResult">
+        <include refid="selectReconciliationEventVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="start != null  and start != ''"> and start = #{start}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="channelcodes != null  and channelcodes != ''"> and channelCodes = #{channelcodes}</if>
+        </where>
+    </select>
+    
+    <select id="selectReconciliationEventListByMoth" parameterType="ReconciliationEvent" resultMap="ReconciliationEventResult">
+        <include refid="selectReconciliationEventVo"/>
+        WHERE date_format(start, '%Y-%m') = DATE_FORMAT(#{start}, '%Y-%m')
+        	 and member_id = #{memberId}
+    </select>
+    
+    <select id="selectReconciliationEventById" parameterType="Long" resultMap="ReconciliationEventResult">
+        <include refid="selectReconciliationEventVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertReconciliationEvent" parameterType="ReconciliationEvent" useGeneratedKeys="true" keyProperty="id">
+        insert into reconciliation_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="start != null  and start != ''">start,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="channelcodes != null  and channelcodes != ''">channelCodes,</if>
+            <if test="memberId != null  and memberId != ''">member_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="start != null  and start != ''">#{start},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="channelcodes != null  and channelcodes != ''">#{channelcodes},</if>
+            <if test="memberId != null  and memberId != ''">#{memberId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReconciliationEvent" parameterType="ReconciliationEvent">
+        update reconciliation_event
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="start != null  and start != ''">start = #{start},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="channelcodes != null  and channelcodes != ''">channelCodes = #{channelcodes},</if>
+            <if test="memberId != null  and memberId != ''">member_id = #{memberId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReconciliationEventById" parameterType="Long">
+        delete from reconciliation_event where id = #{id}
+    </delete>
+
+    <delete id="deleteReconciliationEventByIds" parameterType="String">
+        delete from reconciliation_event where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

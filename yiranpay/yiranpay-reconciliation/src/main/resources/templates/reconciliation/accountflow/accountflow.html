@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('入账流水列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>支付流水：</p>
+                                <input type="text" name="paymentSeqNo"/>
+                            </li>
+                            <li>
+                                <p>清算指令：</p>
+                                <input type="text" name="clearingOrderId"/>
+                            </li>
+                            <li>
+                                <p>产品编码：</p>
+                                <input type="text" name="productCode"/>
+                            </li>
+                            <li>
+                                <p>资金渠道：</p>
+                                <input type="text" name="fundsChannel"/>
+                            </li>
+                            
+                            <li>
+                                <p>入账日期：</p>
+                                <input type="text" name="accountDate"/>
+                            </li>
+                            <li>
+                                <p>机构订单：</p>
+                                <input type="text" name="bizNo"/>
+                            </li>
+                            <li>
+                                <p>是否勾销流水：</p>
+                                <select name="isWriteoff" th:with="type=${@dict.getType('flow_blending_or_not')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>对账状态：</p>
+                                <select name="compareFlag" th:with="type=${@dict.getType('flow_reconciliation_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                                                       
+                            <li>
+                                <p>业务类型：</p>
+                                <select name="bizType" th:with="type=${@dict.getType('flow_biz_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="reconciliation:accountflow:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="reconciliation:accountflow:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="reconciliation:accountflow:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="reconciliation:accountflow:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('reconciliation:accountflow:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('reconciliation:accountflow:remove')}]];
+        var prefix = ctx + "reconciliation/accountflow";
+
+        var flow_blending_or_not = [[${@dict.getType('flow_blending_or_not')}]];
+        var flow_reconciliation_status = [[${@dict.getType('flow_reconciliation_status')}]];
+        var flow_biz_type = [[${@dict.getType('flow_biz_type')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "入账流水",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'glideId', 
+                    title : '入账流水id',
+                    visible: false
+                },
+                {
+                    field : 'paymentSeqNo', 
+                    title : '支付流水号'
+                },
+                {
+                    field : 'clearingOrderId', 
+                    title : '清算指令ID'
+                },
+                {
+                    field : 'productCode', 
+                    title : '产品编码'
+                },
+                {
+                    field : 'paymentCode', 
+                    title : '支付编码'
+                },
+                {
+                    field : 'fundsChannel', 
+                    title : '资金渠道'
+                },
+                {
+                    field : 'amount', 
+                    title : '金额'
+                },
+                {
+                    field : 'accountDate', 
+                    title : '入账日期'
+                },
+                {
+                    field : 'bizNo', 
+                    title : '机构订单号'
+                },
+                {
+                    field : 'isWriteoff', 
+                    title : '是否勾销流水',
+				 	formatter: function(value, row, index) {
+					   return $.table.selectDictLabel(flow_blending_or_not, value);
+					}
+                },
+                {
+                    field : 'compareFlag', 
+                    title : '对账状态',
+                    formatter: function(value, row, index) {
+ 					   return $.table.selectDictLabel(flow_reconciliation_status, value);
+ 					}
+                },
+                {
+                    field : 'compareDate', 
+                    title : '对账日期'
+                },
+                {
+                    field : 'compareBatchNo', 
+                    title : '对账批次号'
+                },
+                {
+                    field : 'operator', 
+                    title : '操作员'
+                },
+                {
+                    field : 'gmtCreate', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'bankCode', 
+                    title : '银行编码'
+                },
+                {
+                    field : 'bizType', 
+                    title : '业务类型',
+                    formatter: function(value, row, index) {
+  					   return $.table.selectDictLabel(flow_biz_type, value);
+  					}
+                },
+                {
+                    field : 'voucherNo', 
+                    title : '会计凭证号'
+                },
+                {
+                    field : 'hisFlag', 
+                    title : '待入历史标记'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.glideId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.glideId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

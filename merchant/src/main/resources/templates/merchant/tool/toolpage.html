@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<th:block th:include="include :: header('支付网工具')" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> RSA公钥私钥生成</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">RSA私钥加密</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">RSA公钥验签</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <div class="row">
+						            <div class="col-sm-12">
+						                <div class="ibox float-e-margins">
+						                    <div class="ibox-title">
+						                        <button type="button" class="btn btn-w-m btn-primary" onclick="createRSAKey()">生成RSA公钥私钥</button>
+						                        <button type="button" class="btn btn-w-m btn-primary" onclick="clearRSAKey()">清空</button>
+						                    </div>
+						                    <div class="ibox-content">
+						                        <div class="form-horizontal">
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">RSA加密公钥</label>
+						                                <div class="col-sm-10">
+						                                    <textarea  class="form-control" rows="3" id="publicKey"></textarea> <span class="help-block m-b-none" style="color: red;">请妥善保存公钥字符串(公钥用于解密)</span>
+						                                </div>
+						                                
+						                                <label class="col-sm-2 control-label">RSA加密私钥</label>
+						                                <div class="col-sm-10">
+						                                    <textarea  class="form-control" rows="8" id="privateKey"></textarea> <span class="help-block m-b-none" style="color: red;">请妥善保存私钥字符串，请勿泄露给他人(私钥用于加密)</span>
+						                                </div>
+						                            </div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+						            <div class="col-sm-12">
+						                <div class="ibox float-e-margins">
+						                    <div class="ibox-title">
+						                        <h5>RSA签名验签 <small>RSA私钥加密</small></h5>
+						                    </div>
+						                    <div class="ibox-content">
+						                        <div  class="form-horizontal">
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">私钥</label>
+						
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="8" id="inputPrivateKey"></textarea>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">需要加密字符串(JSON)</label>
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="3" id="jsondata"></textarea>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">签名原串</label>
+						
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="2" id="srcdata"></textarea>
+						                                    <span class="help-block m-b-none" style="color: red;">生成签名原串：将请求的参数按照key_1=value_1&key_2=value2的形式进行排列， 排列时需要注意:</br>
+						                                    1.参数的排放顺序按照首字母进行升序排列。</br>
+						                                    2.所有值不为空的参数均需参与签名。</span>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label"></label>
+						                                <div class="col-sm-10">
+						                                    <button type="button" class="btn btn-w-m btn-primary" onclick="privateKeyEncryption()">RSA私钥加密</button>
+						                        			<button type="button" class="btn btn-w-m btn-primary" onclick="clearRSAPrivateKey()">清空</button>
+						                                </div>
+						                            </div>
+						                            <div class="hr-line-dashed"></div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">加密后sign</label>
+						                                <div class="col-sm-10">
+						                                    <textarea  maxlength="500" class="form-control" rows="2" id="signdata"></textarea>
+						                                </div>
+						                            </div>
+						                            
+						                            
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </div>
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+						            <div class="col-sm-12">
+						                <div class="ibox float-e-margins">
+						                    <div class="ibox-title">
+						                        <h5>RSA签名验签 <small>RSA公钥验签</small></h5>
+						                    </div>
+						                    <div class="ibox-content">
+						                        <div  class="form-horizontal">
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">公钥</label>
+						
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="3" id="inputPublicKey"></textarea>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">需要验签字符串(JSON)</label>
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="3" id="verifyjsondata"></textarea>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">验签签名原串</label>
+						
+						                                <div class="col-sm-10">
+						                                    <textarea  class="form-control" rows="2" id="verifysrcdata"></textarea>
+						                                    <span class="help-block m-b-none" style="color: red;">生成签名原串：将请求的参数按照key_1=value_1&key_2=value2的形式进行排列， 排列时需要注意:</br>
+						                                    1.参数的排放顺序按照首字母进行升序排列。</br>
+						                                    2.所有值不为空的参数均需参与签名。</span>
+						                                </div>
+						                            </div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label"></label>
+						                                <div class="col-sm-10">
+						                                    <button type="button" class="btn btn-w-m btn-primary" onclick="publicKeyCheckSignn()">RSA公钥验签</button>
+						                        			<button type="button" class="btn btn-w-m btn-primary" onclick="clearRSAPublicKeyCheckSign()">清空</button>
+						                                </div>
+						                            </div>
+						                            <div class="hr-line-dashed"></div>
+						                            <div class="form-group">
+						                                <label class="col-sm-2 control-label">验签结果</label>
+						                                <div class="col-sm-10">
+						                                    <textarea   class="form-control" rows="3" id="verifysignresult"></textarea>
+						                                </div>
+						                            </div>
+						                            
+						                            
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            
+        </div>
+        
+
+    </div>
+    <th:block th:include="include :: footer" />
+</body>
+<script th:inline="javascript">
+	var prefix = ctx + "merchanr/key/tool";
+	
+	function createRSAKey(){
+		//创建前先清空
+		$("#publicKey").html("");
+    	$("#privateKey").html("");
+		$.ajax({
+            url: prefix + "/createRSAKey",
+            type: "POST",
+            success: function (obj) {
+            	$("#publicKey").html(obj.data.publicKey);
+            	$("#privateKey").html(obj.data.privateKey);
+            	
+            }
+		}); 
+	}
+	
+	function clearRSAKey(){
+		$("#publicKey").html("");
+    	$("#privateKey").html("");
+	}
+	var RSAPrivateKeyEncryption = function RSAPrivateKeyEncryption(inputPrivateKey,jsondata) {
+		this.inputPrivateKey = inputPrivateKey;
+		this.jsondata = jsondata;
+	}
+	//私钥加密
+	function privateKeyEncryption(){
+		$.modal.loading("RSA私钥加密，请等待...");
+		var inputPrivateKey = $("#inputPrivateKey").val();
+		var jsondata = $("#jsondata").val();
+		jsondata = jsondata.replace(/\s*/g,"");
+		var privateKeyEncryption = new RSAPrivateKeyEncryption(inputPrivateKey,jsondata);
+		var encryptionJson = JSON.stringify(privateKeyEncryption);
+		$.ajax({
+			type: "post",
+			url: prefix+"/rsaPrivateKeyEncryption",
+			data: encryptionJson,
+			//参数格式为json
+  			contentType: "application/json; charset=utf-8",
+			//async: false, //同步
+			success: function (obj) {
+				$.modal.closeLoading();
+				$("#srcdata").val(obj.data.signSrc);
+				$("#signdata").val(obj.data.sign);
+			},
+			//调用出错执行的函数
+			error: function(){
+				console.info("请求服务器api失败，无法获取数据");
+			}
+		});
+		
+	}
+	
+	var RSAPublicKeyDecrypt = function RSAPublicKeyDecrypt(inputPublicKey,verifyjsondata) {
+		this.inputPublicKey = inputPublicKey;
+		this.verifyjsondata = verifyjsondata;
+	}
+	//公钥解密
+	function publicKeyCheckSignn(){
+		$.modal.loading("RSA公钥解密，请等待...");
+		var inputPublicKey = $("#inputPublicKey").val();
+		var verifyjsondata = $("#verifyjsondata").val();
+		verifyjsondata = verifyjsondata.replace(/\s*/g,"");
+		var publicKeyDecrypt = new RSAPublicKeyDecrypt(inputPublicKey,verifyjsondata);
+		var decryptJson = JSON.stringify(publicKeyDecrypt);
+		$.ajax({
+			type: "post",
+			url: prefix+"/rsaPublicKeyDecrypt",
+			data: decryptJson,
+			//参数格式为json
+  			contentType: "application/json; charset=utf-8",
+			//async: false, //同步
+			success: function (obj) {
+				$.modal.closeLoading();
+				$("#verifysrcdata").val(obj.data.verifysrcdata);
+				$("#verifysignresult").val(obj.data.verifysignresult);
+			},
+			//调用出错执行的函数
+			error: function(){
+				console.info("请求服务器api失败，无法获取数据");
+			}
+		});
+		
+	}
+	
+	function clearRSAPrivateKey(){
+		$("#inputPrivateKey").val("");
+    	$("#jsondata").val("");
+    	$("#srcdata").val("");
+    	$("#signdata").val("");
+	}
+	
+	
+	
+	function clearRSAPublicKeyCheckSign(){
+		$("#inputPublicKey").val("");
+    	$("#verifyjsondata").val("");
+    	$("#verifysrcdata").val("");
+    	$("#verifysignresult").val("");
+	}
+
+</script>
+</html>

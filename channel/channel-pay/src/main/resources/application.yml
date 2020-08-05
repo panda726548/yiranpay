@@ -1,0 +1,34 @@
+# 项目相关配置
+channelpay:
+  # 名称
+  name: 支付渠道
+  # 版本
+  version: 1.1.0
+  # 版权年份
+  copyrightYear: 2020
+  # 支付渠道配置文件路径 E:/opt/pay/config/basis/bcss
+  payChannelconfigFilePath: /opt/pay/config/basis/bcss
+# spring框架相关配置
+spring:
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  rabbitmq:
+    host: 123.206.111.215
+    port: 5672
+    username: yiranadmin
+    password: yiran123456
+    publisher-confirms: true
+    publisher-returns: true
+# Servlet容器相关配置
+server:
+  # 服务器的HTTP端口，默认为8087
+  port: 8087
+  use-forward-headers: true
+
+

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增入账流水')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-accountflow-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">支付流水号：</label>
+                <div class="col-sm-8">
+                    <input name="paymentSeqNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">清算指令ID：</label>
+                <div class="col-sm-8">
+                    <input name="clearingOrderId" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品编码：</label>
+                <div class="col-sm-8">
+                    <input name="productCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">支付编码：</label>
+                <div class="col-sm-8">
+                    <input name="paymentCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资金渠道：</label>
+                <div class="col-sm-8">
+                    <input name="fundsChannel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">金额：</label>
+                <div class="col-sm-8">
+                    <input name="amount" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">入账日期：</label>
+                <div class="col-sm-8">
+                    <input name="accountDate" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">机构订单号：</label>
+                <div class="col-sm-8">
+                    <input name="bizNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">是否勾销流水，Y:是，N:否：</label>
+                <div class="col-sm-8">
+                    <input name="isWriteoff" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">对账状态。I:初始/S:成功/W:已勾销/L:逻辑错误/U:金额不等：</label>
+                <div class="col-sm-8">
+                    <input name="compareFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">对账日期：</label>
+                <div class="col-sm-8">
+                    <input name="compareDate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">对账批次号：</label>
+                <div class="col-sm-8">
+                    <input name="compareBatchNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">操作员：</label>
+                <div class="col-sm-8">
+                    <input name="operator" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">创建时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="gmtCreate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最后修改时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="gmtModified" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="memo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">银行编码：</label>
+                <div class="col-sm-8">
+                    <input name="bankCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务类型，I:充值，O:提现，B:退款：</label>
+                <div class="col-sm-8">
+                    <select name="bizType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">会计凭证号，用于对应销账凭证，0表示未申请销账：</label>
+                <div class="col-sm-8">
+                    <input name="voucherNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">待入历史标记，默认为空，Y:汇总确认待移入历史：</label>
+                <div class="col-sm-8">
+                    <input name="hisFlag" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "reconciliation/accountflow"
+        $("#form-accountflow-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-accountflow-add').serialize());
+            }
+        }
+
+        $("input[name='gmtCreate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='gmtModified']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('文章')" />
+	<th:block th:include="include :: layout-latest-css" />
+	<th:block th:include="include :: ztree-css" />
+</head>
+
+<body class="gray-bg">
+	<div class="ui-layout-west">
+		<div class="main-content">
+			<div class="box box-main">
+				<div class="box-header">
+					<div class="box-title">
+						<i class="fa icon-grid"></i> 栏目
+					</div>
+					<div class="box-tools pull-right">
+					    <a type="button" class="btn btn-box-tool menuItem" href="#" onclick="channel()" title="栏目"><i class="fa fa-edit"></i></a>
+						<button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
+						<button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
+						<button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新栏目"><i class="fa fa-refresh"></i></button>
+					</div>
+				</div>
+				<div class="ui-layout-content">
+					<div id="tree" class="ztree"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-div ui-layout-center">
+		<div class="row">
+			<div class="col-sm-12 select-info">
+				<form id="user-form">
+					<input type="hidden" id="cid" name="cid">
+	                <input type="hidden" id="pid" name="pid">
+					<div class="select-list ">
+						<ul>
+							<li>
+								文章标题：<input type="text" name="title" id="title"/>
+							</li>
+							<li>
+								文章状态：<select name="status" th:with="type=${@dict.getType('system_content_column_type')}">
+									<option value="">所有</option>
+									<option th:each="e : ${type}" th:text="${e['dictLabel']}" th:value="${e['dictValue']}"></option>
+								</select>
+							</li>
+							<li class="select-time">
+								<label>创建时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+								<!--
+								 <a class="btn btn-success btn-rounded btn-sm" onclick="$.table.exportExcel($('form').attr('id'))"><i class="fa fa-download"></i>&nbsp;下载</a>
+
+								 -->
+
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group hidden-xs" id="toolbar" role="group">
+	        	<a class="btn btn-outline btn-success btn-rounded" onclick="$.operate.addFull()" shiro:hasPermission="system:user:add">
+	                <i class="fa fa-plus"></i> 新增文章
+	            </a>
+	            <a class="btn btn-outline btn-danger btn-rounded" onclick="$.operate.removeAll()" shiro:hasPermission="system:user:remove">
+	                <i class="fa fa-trash-o"></i> 删除文章
+	            </a>
+	        </div>
+	        
+	        <div class="col-sm-12 select-info table-striped">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('system:content:topic:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('system:content:topic:remove')}]];
+		var cancelRelease = [[${@permission.hasPermi('system:content:topic:cancelRelease')}]];
+		var publishArticles = [[${@permission.hasPermi('system:content:topic:publishArticles')}]];
+		var showArticles = [[${@permission.hasPermi('system:content:topic:showArticles')}]];
+		var prefix = ctx + "system/content/topic";
+		var recommends = [[${@dict.getType('system_content_topic_recommend')}]];
+		var statuss = [[${@dict.getType('system_content_topic_status')}]];
+		$(document).ready(function(){
+			$('body').layout({ west__size: 200 });
+			queryTopicList();
+			queryTopicTreeDaTa();
+		});
+
+		function queryTopicList() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        publishArticlesUrl: prefix + "/publishArticles/{id}",
+		        cancelReleaseUrl: prefix + "/cancelRelease/{id}",
+		        showArticlesUrl: prefix + "/showArticles/{id}",
+		        sortName: "createTime",
+		        sortOrder: "desc",
+		        modalName: "文章",
+		        search: false,
+		        showExport: false,
+		        columns: [{
+		            checkbox: true
+		        },
+					{
+						field : 'id',
+						title : 'id',
+						visible: false
+					},
+		        {
+		        	field : 'title', 
+					title : '文章标题',
+					formatter : function (value, row, index) {
+					   var ahtml = "<a target='_blank' href='#'>"+value+"</a>";
+					    return ahtml;
+					}
+		        },
+		        {
+		        	field : 'author', 
+					title : '作者'
+		        },
+		        {
+					field : 'recommend', 
+					title : '是否推荐' ,
+					align: "center",
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(recommends, value);
+		            }
+		        },
+		        {
+		        	field : 'cname', 
+					title : '所属栏目' 
+		        },
+		        {
+		            field: 'status',
+		            title: '文章状态',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+						return $.table.selectDictLabel(statuss, value);
+
+		            }
+		        },
+					{
+						field: 'status',
+
+						align: 'left',
+						formatter: function(value, row, index) {
+
+							if (value == '1') {
+								var actions = [];
+								actions.push('<a class="btn btn-danger btn-xs ' + cancelRelease + '" href="#" onclick="cancelRelease1(\'' + row.id + '\')"><i class="fa fa-remove"></i>取消发布</a> ');
+								return actions.join('');
+							} else if (value == '0') {
+								var actions = [];
+								actions.push('<a class="btn btn-success btn-xs ' + publishArticles + '" href="#" onclick="publishArticles1(\'' + row.id + '\')"><i class="fa fa-edit"></i>发布文章</a> ');
+								return actions.join('');
+							}
+						}
+					},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                actions.push('<a class="btn btn-success btn-xs ' + showArticles + '" href="#" onclick="show(\'' + row.id + '\')"><i class="fa fa-edit"></i>预览</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		}
+		function show(id) {
+			var url = prefix + "/showArticles/"+id;
+			$.modal.openTab("预览", url);
+		}
+		//发布
+		function publishArticles1(id) {
+			$.operate.post(prefix + "/publishArticles", { "id": id });
+		}
+		//取消发布
+		function cancelRelease1(id) {
+			$.operate.post(prefix + "/cancelRelease", { "id": id });
+		}
+		function queryTopicTreeDaTa()
+		{
+			// 树结构初始化加载
+			var setting = {view:{selectedMulti:false},data:{key:{title:"title"},simpleData:{enable:true}},
+				callback:{onClick:function(event, treeId, treeNode){
+					tree.expandNode(treeNode);
+					$("#cid").val(treeNode.id);
+					//$("#pid").val(treeNode.pId);
+					$("#pid").val(treeNode.id);
+					$.table.search($('form').attr('id'));
+				}}
+			}, tree, loadTree = function(){
+				$.get(ctx + "system/content/column/treeData", function(data) {
+				    tree = $.fn.zTree.init($("#tree"), setting, data); //.expandAll(true);
+				    // 展开第一级节点
+				    var nodes = tree.getNodesByParam("level", 0);
+				    for (var i = 0; i < nodes.length; i++) {
+				        tree.expandNode(nodes[i], true, false, false);
+				    }
+				    // 展开第二级节点
+				    nodes = tree.getNodesByParam("level", 1);
+				    for (var i = 0; i < nodes.length; i++) {
+				        tree.expandNode(nodes[i], true, false, false);
+				    }
+				}, null, null, "正在加载，请稍后...");
+			};loadTree();
+
+			$('#btnExpand').click(function() {
+				tree.expandAll(true);
+			    $(this).hide();
+			    $('#btnCollapse').show();
+			});
+			$('#btnCollapse').click(function() {
+				tree.expandAll(false);
+			    $(this).hide();
+			    $('#btnExpand').show();
+			});
+			$('#btnRefresh').click(function() {
+			    loadTree();
+			});
+		}
+
+		/*文章管理-栏目*/
+		function channel() {
+			var url = ctx + "system/content/column";
+			createMenuItem(url, "栏目管理");
+		}
+
+	</script>
+</body>
+</html>
