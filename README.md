@@ -11,7 +11,7 @@
 - 后台地址：http://www.yiranpay.xyz
 - 商户站地址：http://merchant.yiranpay.xyz
 - 收银台：http://cashier.yiranpay.xyz/demo
-- 项目信息：http://crapapi.yiranpay.xyz/project.do#/module/list?projectId=157734276529007000001
+- 项目信息：http://crapapi.yiranpay.xyz/static/157734276529007000001/157746064441509000022-articleList--1.html
 ## 核心技术
 - 核心框架：Spring Boot
 - 权限框架：Apache Shiro
