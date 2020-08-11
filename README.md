@@ -3,6 +3,7 @@
 ## 技术交流群
 - QQ群：909552379 【备注：依然聚合支付】
 - 微信号:love520yr1314xm 加微信【备注：依然聚合支付】拉入微信交流群，联系作者
+-yiranpay-paychannel、yiranpay-payorder QQ群下载
 ## 在线体验
 ```
 后台：用户名：test  密码:123456
