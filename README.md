@@ -71,6 +71,11 @@ merchant //商户后台管理系统（独立部署）
 cashier //收银台（测试，独立部署）
 
 ```
+```
+2020.11.24 更新版本
+    1.新增银行卡签约接口
+    2.优化一些细节，修复bug
+```
 ## 架构图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234147_f7bcb04e_928853.png "40.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234207_fd42637b_928853.png "41.png")
@@ -147,6 +152,8 @@ cashier //收银台（测试，独立部署）
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/004620_86a2ee58_928853.png "35.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/004700_c081e60d_928853.png "36.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/004855_aaf2da79_928853.png "60.png")
+![银行卡信息](https://www.showdoc.com.cn/server/api/attachment/visitfile/sign/8534a5bde59e549674d309675552d13d)
+![签约信息](https://www.showdoc.com.cn/server/api/attachment/visitfile/sign/33420a04d3e1c28fba630ed3ebaf38b6)
 
 ## 商户后台演示图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/005022_514233de_928853.png "m1.png")
