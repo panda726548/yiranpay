@@ -72,17 +72,24 @@ cashier //收银台（测试，独立部署）
 
 ```
 ```
+2020.12.28 更新版本
+    1.新增添加商户生成收款二维码
+    2.新增H5手机支付收银台，支持微信和支付宝支付
+
+```
+```
 2020.11.24 更新版本
     1.新增银行卡签约接口
     2.优化一些细节，修复bug
 ```
+## 新增H5手机支付收银台
+备注：测试金额请小额支付（0.01），不要大额支付，测试金额无法退还
+!![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003529_40bf232f_928853.jpeg "rBEADF_oVhqAPtABAADDwE8Jpyw543.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003723_972cf895_928853.jpeg "微信图片_20201229003503.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003801_c4c1ef31_928853.jpeg "微信图片_20201229003519.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003832_5bf901bf_928853.jpeg "微信图片_20201229003513.jpg")
 
-```
-2020.12.28 更新版本
-    1.新增添加商户生成收款二维码
-    2.添加收银台，支持微信和支付宝支付
 
-```
 ## 架构图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234147_f7bcb04e_928853.png "40.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234207_fd42637b_928853.png "41.png")
