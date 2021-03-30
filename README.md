@@ -9,7 +9,7 @@
 后台：用户名：test  密码:123456
 商户：用户名：498617606@qq.com  密码：123456
 ```
-- 后台地址：http://www.yiranpay.xyz
+- 后台地址：http://yiranpay.xyz
 - 商户站地址：http://merchant.yiranpay.xyz
 - 收银台：http://cashier.yiranpay.xyz/demo
 - 项目信息：http://crapapi.yiranpay.xyz/static/157734276529007000001/157746064441509000022-articleList--1.html
