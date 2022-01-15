@@ -1,5 +1,22 @@
 ## 聚合支付平台简介
 聚合支付是一种第四方支付服务。简而言之，第三方支付提供的是资金清算通道，而聚合支付提供的是支付基础之上的多种衍生服务。聚合支付服务”不具备支付牌照，而是通过聚合多种第三方支付平台、合作银行及其他服务商接口等支付工具的综合支付服务。聚合支付不进行资金清算，但能够根据商户的需求进行个性化定制，形成支付通道资源优势互补，具有中立性、灵活性、便捷性等特点。目前已经对接微信，支付宝，银联支付等渠道。
+## 技术交流群
+- QQ群：909552379 【备注：依然聚合支付】
+- 微信号:love520yr1314xm 加微信【备注：依然聚合支付】拉入微信交流群，联系作者
+- yiranpay-paychannel、yiranpay-payorder QQ群下载
+## 在线体验
+```
+后台地址：http://139.224.69.5:8088
+用户名：test1 密码:123456
+```
+```
+商户端：http://139.224.69.5:8089/login
+用户名：498617606@qq.com 密码：123456
+```
+```
+api文档：http://139.224.69.5:8083/admin.do#/user/interface/list?pageName=%E6%8E%A5%E5%8F%A3&dataType=interface&menu_a=menu-project&menu_b=menu_interface&projectId=157734276529007000001&projectName=%E8%81%9A%E5%90%88%E6%94%AF%E4%BB%98%E7%B3%BB%E7%BB%9F
+用户名：test1 密码：123456
+```
 ## 更新版本
 ```
 2021.12.23 更新版本
@@ -36,22 +53,7 @@
     1.新增银行卡签约接口
     2.优化一些细节，修复bug
 ```
-## 技术交流群
-- QQ群：909552379 【备注：依然聚合支付】
-- 微信号:love520yr1314xm 加微信【备注：依然聚合支付】拉入微信交流群，联系作者
-- yiranpay-paychannel、yiranpay-payorder QQ群下载
-## 在线体验
-```
-后台地址：http://139.224.69.5:8088
-用户名：test1 密码:123456
-```
-```
-商户端：http://139.224.69.5:8089/login
-用户名：498617606@qq.com 密码：123456
-```
-```
-http://139.224.69.5:8083/admin.do#/user/interface/list?pageName=%E6%8E%A5%E5%8F%A3&dataType=interface&menu_a=menu-project&menu_b=menu_interface&projectId=157734276529007000001&projectName=%E8%81%9A%E5%90%88%E6%94%AF%E4%BB%98%E7%B3%BB%E7%BB%9F
-```
+
 ## 核心技术
 - 核心框架：Spring Boot
 - 权限框架：Apache Shiro
