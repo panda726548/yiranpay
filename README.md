@@ -19,6 +19,13 @@ api文档：http://139.224.69.5:8083/admin.do#/user/interface/list?pageName=%E6%
 ```
 ## 更新版本
 ```
+2022.05.18 更新版本
+    1.升级微信支付接口，由原来的V2升级为V3API,涉及到接口如下
+    统一下单、查询订单API、支付通知API、申请退款API、查询单笔退款API、退款结果通知API、申请交易账单API、下载账单API
+    2.优化统一异步通知接口
+
+```
+```
 2021.12.23 更新版本
     1.新增农行银企直连渠道接口
     查询账户余额 (CQRA06 交易)
@@ -75,8 +82,6 @@ api文档：http://139.224.69.5:8083/admin.do#/user/interface/list?pageName=%E6%
 - 分布式文件系统：FastDFS
 - 持续集成：Jenkins
 ## 系统结构
-
-
 ```
 yiranpay //聚合支付
 ├── yiranpay-admin //后台管理模块 单独部署
@@ -112,15 +117,6 @@ merchant //商户后台管理系统（独立部署）
 cashier //收银台（测试，独立部署）
 
 ```
-
-## 新增H5手机支付收银台
-备注：测试金额请小额支付（0.01），不要大额支付，测试金额无法退还
-!![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003529_40bf232f_928853.jpeg "rBEADF_oVhqAPtABAADDwE8Jpyw543.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003723_972cf895_928853.jpeg "微信图片_20201229003503.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003801_c4c1ef31_928853.jpeg "微信图片_20201229003519.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003832_5bf901bf_928853.jpeg "微信图片_20201229003513.jpg")
-
-
 ## 架构图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234147_f7bcb04e_928853.png "40.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0530/234207_fd42637b_928853.png "41.png")
@@ -216,7 +212,14 @@ cashier //收银台（测试，独立部署）
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/005344_16d83710_928853.png "m14.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/005402_8a9a4183_928853.png "m15.png")
 
-## 收银台演示图
+## H5手机支付收银台
+备注：测试金额请小额支付（0.01），不要大额支付，测试金额无法退还
+![image](https://user-images.githubusercontent.com/52069417/169253704-7fa9a14d-e291-4126-8730-280d454fcb4e.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003723_972cf895_928853.jpeg "微信图片_20201229003503.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003801_c4c1ef31_928853.jpeg "微信图片_20201229003519.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003832_5bf901bf_928853.jpeg "微信图片_20201229003513.jpg")
+
+## PC端收银台演示图
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/005908_f44053e5_928853.png "c1.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0531/010047_e0548484_928853.jpeg "c2.jpg")
 
