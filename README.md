@@ -24,6 +24,7 @@ api文档：http://139.224.69.5:8083/admin.do#/user/interface/list?pageName=%E6%
     Yiranpay-Cloud 微服务版本即将上线。在yiranpay单体版本基础上升级改造，前后端分离
    
 ```
+![输入图片说明](https://foruda.gitee.com/images/1683932923411455668/783d9cd4_928853.png "9.png")
 
 ```
 2023.05.11 更新版本
