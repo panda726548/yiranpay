@@ -243,6 +243,7 @@ cashier //收银台（测试，独立部署）
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003723_972cf895_928853.jpeg "微信图片_20201229003503.jpg")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003801_c4c1ef31_928853.jpeg "微信图片_20201229003519.jpg")
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1229/003832_5bf901bf_928853.jpeg "微信图片_20201229003513.jpg")
+
 <img width="407" alt="计算机软件著作权证书" src="https://github.com/panda726548/yiranpay/assets/52069417/52a4a9cc-d8d0-429c-ab21-f7a00b11da97">
 
 
